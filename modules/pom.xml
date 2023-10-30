@@ -9,6 +9,11 @@
     <version>1.0.0-beta</version>
     <packaging>pom</packaging>
 
+    <scm>
+        <url>https://github.com/giovannymassuia/minimalist-java</url>
+        <connection>scm:git:git://github.com/giovannymassuia/minimalist-java.git</connection>
+    </scm>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
