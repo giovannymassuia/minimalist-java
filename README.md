@@ -11,8 +11,8 @@ together for a cohesive development experience.
 
 ## Modules
 
-1. **Minimalist API (`minimalist-api`)**: Provides essential API functionalities for Java applications.
-2. **Minimalist Dependency Injection (`minimal-dependency-injection`)**: A lightweight solution for dependency injection
+1. **Minimalist Http API (`http-api`)**: Provides essential API functionalities for Java applications.
+2. **Minimalist Dependency Injection (`di`)**: A lightweight solution for dependency injection
    in Java.
 
 ---
@@ -67,7 +67,7 @@ Next, you can add the dependency to your project:
 
 <dependency>
     <groupId>io.giovannymassuia.minimalist.java</groupId>
-    <artifactId>api</artifactId>
+    <artifactId>http-api</artifactId>
     <version>LATEST_VERSION</version>
 </dependency>
 ```
@@ -103,7 +103,7 @@ Now, when adding individual `minimalist-java` modules to your dependencies, you 
 <dependencies>
     <dependency>
         <groupId>io.giovannymassuia.minimalist.java</groupId>
-        <artifactId>api</artifactId>
+        <artifactId>http-api</artifactId>
     </dependency>
     <dependency>
         <groupId>io.giovannymassuia.minimalist.java</groupId>
