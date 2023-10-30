@@ -1,0 +1,69 @@
+name: Build, Publish, and Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_publish_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    env:
+      working-directory: ./modules
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'oracle'
+          java-version: '21'
+
+      # Extract version from pom.xml
+      - name: Get the version
+        working-directory: ${{ env.working-directory }}
+        run: echo "PROJECT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+
+      # Build the code
+      - name: Build with Maven
+        working-directory: ${{ env.working-directory }}
+        run: mvn clean install
+
+      # Publish to GitHub Package Repository
+      - name: Publish to GitHub Package Repository
+        working-directory: ${{ env.working-directory }}
+        run: mvn deploy -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Tag the new version
+      - name: Create and Push Tag
+        working-directory: ${{ env.working-directory }}
+        run: |
+          git tag ${{ env.PROJECT_VERSION }}
+          git push origin ${{ env.PROJECT_VERSION }}
+
+      # Extract changelog for current version
+      - name: Extract changelog for current version
+        id: extract-changelog
+        working-directory: ${{ env.working-directory }}
+        run: |
+          # Extract the section for the current version from CHANGELOG.md
+          CHANGELOG=$(sed -n "/^## \[${{ env.PROJECT_VERSION }}\]/,/## \[/p" CHANGELOG.md | sed '$d')
+          # Use ::set-output to create an output variable for the step
+          echo "$CHANGELOG" > version_changelog.md
+
+      # Create GitHub Release
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.PROJECT_VERSION }}
+          release_name: Release ${{ env.PROJECT_VERSION }}
+          body_path: ${{ env.working-directory }}/version_changelog.md
+          draft: false
+          prerelease: false

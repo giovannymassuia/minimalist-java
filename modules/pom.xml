@@ -6,7 +6,7 @@
 
     <groupId>io.giovannymassuia.minimalist.java</groupId>
     <artifactId>minimalist-java-root</artifactId>
-    <version>1.0.0-beta</version>
+    <version>0.0.1-beta-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
@@ -45,5 +45,29 @@
             <url>https://maven.pkg.github.com/giovannymassuia/minimalist-java</url>
         </repository>
     </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <!-- Any custom configurations -->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

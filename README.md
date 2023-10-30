@@ -71,3 +71,19 @@ If you choose not to use the BOM, you'll need to specify versions for each Minim
     </dependency>
 </dependencies>
 ```
+
+---
+
+## Updating POMs versions
+
+To update the versions of all POMs in the project, run the following command:
+
+```shell
+mvn versions:set -DnewVersion=NEW_VERSION
+```
+
+To revert the changes, run:
+
+```shell
+mvn versions:revert
+```
