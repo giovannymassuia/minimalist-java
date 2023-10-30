@@ -4,40 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d32eaf3-d656-49cb-924f-7c577cd52ba4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/jpa-buddy.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/app/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/app/database/DatabaseConnection.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/app/domain/Todo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/app/http/handlers/TodoController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/app/http/handlers/TodoHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/app/service/TodoService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/app/service/TodoServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/di/ClassScanner.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/di/SimpleDIContainer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/di/Singleton.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/AbstractHttpHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/HttpContext.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/ResponseEntity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/Route.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/Utils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/WebServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/annotations/Get.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/annotations/Path.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/annotations/PathParam.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/io/giovannymassuia/framework/http/annotations/Post.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/resources/database/init.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/resources/logback.xml" beforeDir="false" />
-    </list>
+    <list default="true" id="3d32eaf3-d656-49cb-924f-7c577cd52ba4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -112,7 +79,7 @@
       <workItem from="1696293940123" duration="3106000" />
       <workItem from="1697328984656" duration="2172000" />
       <workItem from="1698624829791" duration="282000" />
-      <workItem from="1698625508718" duration="1496000" />
+      <workItem from="1698625508718" duration="1497000" />
     </task>
     <servers />
   </component>
