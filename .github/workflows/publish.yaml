@@ -1,4 +1,4 @@
-name: Build, Publish, and Release
+name: CI/CD
 
 on:
   workflow_dispatch:
