@@ -13,5 +13,8 @@
         <module name="di" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="minimalist-java-root" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

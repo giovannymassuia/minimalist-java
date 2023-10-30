@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.giovannymassuia.minimalist.java</groupId>
-    <artifactId>minimalist-java-root</artifactId>
+    <artifactId>root</artifactId>
     <version>0.0.1-beta-SNAPSHOT</version>
     <packaging>pom</packaging>
 
