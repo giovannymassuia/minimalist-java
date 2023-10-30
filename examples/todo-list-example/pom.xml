@@ -13,7 +13,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <minimalist-java.version>0.0.2</minimalist-java.version>
+        <minimalist-java.version>0.0.4-beta</minimalist-java.version>
     </properties>
 
     <dependencyManagement>
