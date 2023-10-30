@@ -12,6 +12,38 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <minimalist-java.version>0.0.2</minimalist-java.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.giovannymassuia.minimalist.java</groupId>
+                <artifactId>bom</artifactId>
+                <version>${minimalist-java.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.giovannymassuia.minimalist.java</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.giovannymassuia.minimalist.java</groupId>
+            <artifactId>di</artifactId>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/giovannymassuia/minimalist-java</url>
+        </repository>
+    </repositories>
 
 </project>
