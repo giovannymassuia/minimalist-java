@@ -47,7 +47,7 @@ In your project's `pom.xml`, add the following repository:
 <repositories>
     <repository>
         <id>github</id>
-        <url>https://maven.pkg.github.com/OWNER/REPO</url>
+        <url>https://maven.pkg.github.com/giovannymassuia/minimalist-java</url>
     </repository>
 </repositories>
 ```
@@ -61,8 +61,8 @@ Next, you can add the dependency to your project:
 ```xml
 
 <dependency>
-    <groupId>com.minimalist</groupId>
-    <artifactId>minimalist-java</artifactId>
+    <groupId>io.giovannymassuia.minimalist.java</groupId>
+    <artifactId>api</artifactId>
     <version>LATEST_VERSION</version>
 </dependency>
 ```
@@ -81,9 +81,9 @@ Add the BOM to your `dependencyManagement` section:
 <dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>com.minimalist</groupId>
-            <artifactId>minimalist-java-bom</artifactId>
-            <version>LATEST_BOM_VERSION</version>
+            <groupId>io.giovannymassuia.minimalist.java</groupId>
+            <artifactId>bom</artifactId>
+            <version>LATEST_VERSION</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -97,12 +97,12 @@ Now, when adding individual `minimalist-java` modules to your dependencies, you 
 
 <dependencies>
     <dependency>
-        <groupId>com.minimalist</groupId>
-        <artifactId>minimal-api</artifactId>
+        <groupId>io.giovannymassuia.minimalist.java</groupId>
+        <artifactId>api</artifactId>
     </dependency>
     <dependency>
-        <groupId>com.minimalist</groupId>
-        <artifactId>minimal-dependency-injection</artifactId>
+        <groupId>io.giovannymassuia.minimalist.java</groupId>
+        <artifactId>di</artifactId>
     </dependency>
 </dependencies>
 ```
