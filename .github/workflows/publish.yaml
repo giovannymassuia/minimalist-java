@@ -37,8 +37,8 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: |
           mvn versions:set -DnewVersion=${{ env.PROJECT_VERSION }} -DgenerateBackupPoms=false
-          git commit -am "Prepare release ${{ env.PROJECT_VERSION }}"
-          git tag "pre-release-${{ env.PROJECT_VERSION }}"
+          git commit -am "📦 release: prepare release ${{ env.PROJECT_VERSION }}"
+          git tag "release-${{ env.PROJECT_VERSION }}"
           git push origin "pre-release-${{ env.PROJECT_VERSION }}"
 
       # Build the code
@@ -85,7 +85,7 @@ jobs:
         run: |
           NEW_VERSION=$(echo ${{ env.PROJECT_VERSION }} | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')-SNAPSHOT
           mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
-          git commit -am "Start next development cycle with $NEW_VERSION"
+          git commit -am "📦 release: next development version $NEW_VERSION"
           git tag "post-release-${{ env.PROJECT_VERSION }}"
           git push
           git push --tags
