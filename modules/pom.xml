@@ -6,7 +6,7 @@
 
     <groupId>io.giovannymassuia.minimalist.java</groupId>
     <artifactId>root</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.1-beta-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
@@ -25,7 +25,7 @@
 
     <modules>
         <module>bom</module>
-        <module>api</module>
+        <module>http-api</module>
         <module>di</module>
     </modules>
 

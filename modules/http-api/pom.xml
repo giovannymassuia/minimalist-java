@@ -7,10 +7,10 @@
     <parent>
         <groupId>io.giovannymassuia.minimalist.java</groupId>
         <artifactId>root</artifactId>
-        <version>0.0.3-SNAPSHOT</version>
+        <version>0.0.1-beta-SNAPSHOT</version>
     </parent>
 
-    <artifactId>api</artifactId>
+    <artifactId>http-api</artifactId>
     <name>Minimalist Java - API</name>
     <description>Minimalist Java API</description>
 

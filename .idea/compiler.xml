@@ -8,7 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="minimalist-java" />
         <module name="bom" />
-        <module name="api" />
+        <module name="http-api" />
         <module name="todo-list-example" />
         <module name="di" />
       </profile>
