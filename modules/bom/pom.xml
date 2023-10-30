@@ -21,6 +21,12 @@
                 <artifactId>api</artifactId>
                 <version>${minimalist-java.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.giovannymassuia.minimalist.java</groupId>
+                <artifactId>di</artifactId>
+                <version>${minimalist-java.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
