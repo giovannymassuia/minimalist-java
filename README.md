@@ -87,3 +87,7 @@ To revert the changes, run:
 ```shell
 mvn versions:revert
 ```
+
+## Contributing
+
+If you'd like to contribute to Minimalist Java, please read our [contributing guidelines](CONTRIBUTING.md).
