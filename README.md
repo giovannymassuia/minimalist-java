@@ -126,3 +126,7 @@ mvn versions:revert
 ## Contributing
 
 If you'd like to contribute to Minimalist Java, please read our [contributing guidelines](CONTRIBUTING.md).
+
+## License
+
+`minimalist-java` is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
