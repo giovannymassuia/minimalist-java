@@ -83,7 +83,19 @@ jobs:
       - name: Bump to next development version
         working-directory: ${{ env.working-directory }}
         run: |
-          NEW_VERSION=$(echo ${{ env.PROJECT_VERSION }} | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')-SNAPSHOT
+          BASE_VERSION=$(echo ${{ env.PROJECT_VERSION }} | cut -d '-' -f 1)
+          LABEL=$(echo ${{ env.PROJECT_VERSION }} | cut -s -d '-' -f 2)
+          PATCH_VERSION=$(echo $BASE_VERSION | awk -F. '{print $3}')
+          NEW_PATCH_VERSION=$((PATCH_VERSION+1))
+          NEW_BASE_VERSION=$(echo $BASE_VERSION | awk -v n=$NEW_PATCH_VERSION -F. '{print $1"."$2"."n}')
+          NEW_VERSION=$NEW_BASE_VERSION
+          
+          if [[ ! -z $LABEL ]]; then
+            NEW_VERSION="$NEW_VERSION-$LABEL"
+          fi
+          
+          NEW_VERSION="$NEW_VERSION-SNAPSHOT"
+          
           mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
           git commit -am "📦 release: next development version $NEW_VERSION"
           git tag "post-release-${{ env.PROJECT_VERSION }}"
