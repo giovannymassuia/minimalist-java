@@ -6,7 +6,7 @@
 
     <groupId>io.giovannymassuia.minimalist.java</groupId>
     <artifactId>root</artifactId>
-    <version>0.0.4-beta</version>
+    <version>0.0.5-beta-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
