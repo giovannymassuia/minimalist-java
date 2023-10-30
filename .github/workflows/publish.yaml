@@ -22,6 +22,11 @@ jobs:
           distribution: 'oracle'
           java-version: '21'
 
+      - name: Set up git user
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
       # Extract version from pom.xml without -SNAPSHOT
       - name: Get the version
         working-directory: ${{ env.working-directory }}
