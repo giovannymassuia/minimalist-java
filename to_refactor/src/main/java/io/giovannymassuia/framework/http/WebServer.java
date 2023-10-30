@@ -22,10 +22,10 @@ public class WebServer {
     public WebServer(int port) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
 
-        Executor executor = Executors.newFixedThreadPool(5);
+//        Executor executor = Executors.newFixedThreadPool(5);
 //        Executor executor = Executors.newVirtualThreadPerTaskExecutor();
 
-        this.server.setExecutor(executor);
+//        this.server.setExecutor(executor);
     }
 
     public WebServer addRoute(Route route) {
@@ -38,9 +38,6 @@ public class WebServer {
             server.createContext(route.rootPath(), exchange -> {
                 String method = exchange.getRequestMethod();
                 URI uri = exchange.getRequestURI();
-
-                // /todos/123/done
-                // /todos/{id}/done
 
                 Map<String, String> extractedPathParams = new HashMap<>();
                 Map<String, String> extractedQueryParams = extractQueryParameters(uri);
