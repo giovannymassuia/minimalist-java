@@ -22,10 +22,19 @@ jobs:
           distribution: 'oracle'
           java-version: '21'
 
-      # Extract version from pom.xml
+      # Extract version from pom.xml without -SNAPSHOT
       - name: Get the version
         working-directory: ${{ env.working-directory }}
-        run: echo "PROJECT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+        run: echo "PROJECT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | sed 's/-SNAPSHOT//')" >> $GITHUB_ENV
+
+      # Update version to release (remove -SNAPSHOT)
+      - name: Update version to release
+        working-directory: ${{ env.working-directory }}
+        run: |
+          mvn versions:set -DnewVersion=${{ env.PROJECT_VERSION }} -DgenerateBackupPoms=false
+          git commit -am "Prepare release ${{ env.PROJECT_VERSION }}"
+          git tag "pre-release-${{ env.PROJECT_VERSION }}"
+          git push origin "pre-release-${{ env.PROJECT_VERSION }}"
 
       # Build the code
       - name: Build with Maven
@@ -49,11 +58,8 @@ jobs:
       # Extract changelog for current version
       - name: Extract changelog for current version
         id: extract-changelog
-        working-directory: ${{ env.working-directory }}
         run: |
-          # Extract the section for the current version from CHANGELOG.md
           CHANGELOG=$(sed -n "/^## \[${{ env.PROJECT_VERSION }}\]/,/## \[/p" CHANGELOG.md | sed '$d')
-          # Use ::set-output to create an output variable for the step
           echo "$CHANGELOG" > version_changelog.md
 
       # Create GitHub Release
@@ -63,7 +69,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.PROJECT_VERSION }}
-          release_name: Release ${{ env.PROJECT_VERSION }}
-          body_path: ${{ env.working-directory }}/version_changelog.md
+          release_name: v${{ env.PROJECT_VERSION }}
+          body_path: version_changelog.md
           draft: false
           prerelease: false
+
+      # Bump to the next development version
+      - name: Bump to next development version
+        working-directory: ${{ env.working-directory }}
+        run: |
+          NEW_VERSION=$(echo ${{ env.PROJECT_VERSION }} | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')-SNAPSHOT
+          mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
+          git commit -am "Start next development cycle with $NEW_VERSION"
+          git tag "post-release-${{ env.PROJECT_VERSION }}"
+          git push
+          git push --tags
