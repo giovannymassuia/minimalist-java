@@ -26,7 +26,7 @@ jobs:
           java-version: '21'
 
       - name: Run All Tests
-        run: ./mvnw test
+        run: mvn test
 
   check_guidelines:
     name: Check Guidelines
