@@ -2,9 +2,26 @@ name: CI/CD
 
 on:
   workflow_dispatch:
+    # only allowed for main branch
+    branches:
+      - main
+  push:
+    # only allowed for main branch
+    branches:
+      - main
 
 jobs:
+  ci:
+    name: CI
+    uses: giovannymassuia/minimalist-java/.github/workflows/ci.yaml@main
+
   build_publish_release:
+    name: Publish and Release
+    environment: production
+    needs: [ ci, check_if_should_release ]
+    # only if the branch is main and the commit message contains <release:patch|minor|major>
+    #    if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '<release:')
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -40,11 +57,6 @@ jobs:
           git commit -am "📦 release: prepare release ${{ env.PROJECT_VERSION }}"
           git tag "release-${{ env.PROJECT_VERSION }}"
           git push origin "release-${{ env.PROJECT_VERSION }}"
-
-      # Build the code
-      - name: Build with Maven
-        working-directory: ${{ env.working-directory }}
-        run: mvn clean install
 
       # Publish to GitHub Package Repository
       - name: Publish to GitHub Package Repository

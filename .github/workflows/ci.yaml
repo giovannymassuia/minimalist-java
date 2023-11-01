@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  # Trigger the workflow on push or pull request, but only for non-main branches
+  push:
+    branches-ignore:
+      - main
+  # This workflow can be reused by other workflows
+  workflow_call:
+
+jobs:
+  run_tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./modules
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'oracle'
+          java-version: '21'
+
+      - name: Run All Tests
+        run: ./mvnw test
+
+  check_guidelines:
+    name: Check Guidelines
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./modules
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'oracle'
+          java-version: '21'
+
+      - name: Check License Headers
+        run: mvn license:check
