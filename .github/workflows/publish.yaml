@@ -18,7 +18,7 @@ jobs:
   build_publish_release:
     name: Publish and Release
     environment: production
-    needs: [ ci, check_if_should_release ]
+    needs: [ ci ]
     # only if the branch is main and the commit message contains <release:patch|minor|major>
     #    if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '<release:')
     if: github.ref == 'refs/heads/main'
