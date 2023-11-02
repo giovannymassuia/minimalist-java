@@ -20,6 +20,5 @@ import org.junit.jupiter.api.Test;
 class ApiTest {
 
     @Test
-    void hello() {
-    }
+    void hello() {}
 }

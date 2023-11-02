@@ -1,16 +1,19 @@
 ## Contributing to Minimalist-Java
 
-First off, thank you for considering contributing to Minimalist-Java. It's people like you that make Minimalist-Java
+First off, thank you for considering contributing to Minimalist-Java. It's people like you that make
+Minimalist-Java
 such a great tool.
 
 ### Where do I go from here?
 
-If you've noticed a bug or have a feature request, make one! It's generally best if you get confirmation of your bug or
+If you've noticed a bug or have a feature request, make one! It's generally best if you get
+confirmation of your bug or
 approval for your feature request this way before starting to code.
 
 ### How do I become a contributor?
 
-> We are in beta development, so we are not accepting contributors at this time. However, we will be accepting
+> We are in beta development, so we are not accepting contributors at this time. However, we will be
+> accepting
 > contributors in the future.
 
 But feel free to open an issue or submit a pull request.
@@ -19,26 +22,32 @@ But feel free to open an issue or submit a pull request.
 
 We follow the [Semantic Versioning 2.0.0](https://semver.org/) standard. Here's a quick rundown:
 
-- **Major versions**: Introduce significant changes to the library that make it backward incompatible. The major version
+- **Major versions**: Introduce significant changes to the library that make it backward
+  incompatible. The major version
   must be incremented if any backward incompatible changes are introduced.
 
-- **Minor versions**: Add functionality in a manner that is backward compatible. For example, adding a new feature is a
+- **Minor versions**: Add functionality in a manner that is backward compatible. For example, adding
+  a new feature is a
   minor change as long as it doesn't break existing functionality.
 
-- **Patch versions**: Introduce backward-compatible bug fixes. If a bug is found and fixed, that's a patch. These
+- **Patch versions**: Introduce backward-compatible bug fixes. If a bug is found and fixed, that's a
+  patch. These
   changes generally do not affect the software's functionality from an end-user's point-of-view.
 
-- **Beta**: Represents a version that is feature complete but might have known limitations or bugs. Beta software is
+- **Beta**: Represents a version that is feature complete but might have known limitations or bugs.
+  Beta software is
   useful for external testing with a larger group to gain feedback for the final release.
 
-- **Snapshot**: Represents a version that is under active development and might have known limitations or bugs. Snapshot
+- **Snapshot**: Represents a version that is under active development and might have known
+  limitations or bugs. Snapshot
   software is useful for internal testing and should not be used in production.
 
 When contributing, consider the impact of your changes and appropriately version your contributions.
 
 ### Fork & create a branch
 
-If this is something you think you can fix, then fork Minimalist-Java and create a branch with a descriptive name.
+If this is something you think you can fix, then fork Minimalist-Java and create a branch with a
+descriptive name.
 
 A good branch name would be (where issue #325 is the ticket you're working on):
 
@@ -48,7 +57,8 @@ git checkout -b feature/325-add-jetpack
 
 ### Guidelines for Commit Messages:
 
-Always refer to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard when structuring
+Always refer to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard
+when structuring
 your commit messages.
 
 Using the provided list, your commits should ideally look like:
@@ -92,7 +102,8 @@ Additional notes:
 - Use lowercase letters except for proper nouns, acronyms, etc.
 - Limit the first line to 72 characters or less
 
-By adhering to the Conventional Commits standard combined with the provided emoji guide, it will be much easier to
+By adhering to the Conventional Commits standard combined with the provided emoji guide, it will be
+much easier to
 review changes, manage versions, and generate changelogs.
 
 ### Release Process:
@@ -105,7 +116,8 @@ Our release process is automated using GitHub Actions:
 4. Code is tagged and pushed with the release version.
 5. Release notes are extracted from `CHANGELOG.md`.
 6. A GitHub release is created using the extracted release notes.
-7. The version in `pom.xml` is bumped to the next `-SNAPSHOT` version for the next development cycle.
+7. The version in `pom.xml` is bumped to the next `-SNAPSHOT` version for the next development
+   cycle.
 
 ### Getting your changes merged
 
@@ -116,7 +128,8 @@ Once you feel good about your changes, it's time to get your changes merged!
 
 ### License docs plugin
 
-This project uses the [License Maven Plugin](https://mycila.carbou.me/license-maven-plugin/) to generate the license for
+This project uses the [License Maven Plugin](https://mycila.carbou.me/license-maven-plugin/) to
+generate the license for
 each java file.
 
 The pipeline will check if the license is present in each java file and will fail if it is not.
@@ -132,3 +145,24 @@ To Check if the license is present in each java file, run the following command:
 ```bash
 mvn license:check
 ```
+
+### Code Formatting
+
+This project uses
+the [Spotless Maven Plugin](https://github.com/diffplug/spotless/tree/main/plugin-maven#eclipse-jdt)
+to check and format the code.
+
+To check if the code is formatted, run the following command:
+
+```bash
+mvn spotless:check
+```
+
+To format the code, run the following command:
+
+```bash
+mvn spotless:apply
+```
+
+To configure your IntelliJ to format the code on save, add the `eclipse-java-google-style.xml` file
+to your IntelliJ settings.

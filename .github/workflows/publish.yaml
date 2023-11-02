@@ -39,6 +39,7 @@ jobs:
           distribution: 'oracle'
           java-version: '21'
 
+      # Set up git user
       - name: Set up git user
         run: |
           git config --local user.email "action@github.com"
@@ -61,7 +62,7 @@ jobs:
       # Publish to GitHub Package Repository
       - name: Publish to GitHub Package Repository
         working-directory: ${{ env.working-directory }}
-        run: mvn deploy -DskipTests
+        run: mvn --no-transfer-progress --batch-mode deploy -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

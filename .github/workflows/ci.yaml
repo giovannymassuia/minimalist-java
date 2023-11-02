@@ -9,6 +9,7 @@ on:
   workflow_call:
 
 jobs:
+  # Run tests
   run_tests:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -28,6 +29,7 @@ jobs:
       - name: Run All Tests
         run: mvn test
 
+  # Check guidelines
   check_guidelines:
     name: Check Guidelines
     runs-on: ubuntu-latest
@@ -46,3 +48,23 @@ jobs:
 
       - name: Check License Headers
         run: mvn license:check
+
+  # Check code style
+  check_code_style:
+    name: Check Code Style
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./modules
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'oracle'
+          java-version: '21'
+
+      - name: Check Code Style
+        run: mvn checkstyle:check

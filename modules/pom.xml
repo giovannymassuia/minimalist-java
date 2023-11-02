@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.giovannymassuia.minimalist.java</groupId>
@@ -16,7 +17,8 @@
     <scm>
         <url>https://github.com/giovannymassuia/minimalist-java</url>
         <connection>scm:git:git://github.com/giovannymassuia/minimalist-java.git</connection>
-        <developerConnection>scm:git:git://github.com/giovannymassuia/minimalist-java.git</developerConnection>
+        <developerConnection>scm:git:git://github.com/giovannymassuia/minimalist-java.git
+        </developerConnection>
     </scm>
 
     <properties>
@@ -26,6 +28,7 @@
 
         <minimalist-java.version>${project.version}</minimalist-java.version>
         <junit.version>5.9.2</junit.version>
+        <spotless-plugin.version>2.40.0</spotless-plugin.version>
 
         <rootDir>${project.basedir}</rootDir>
     </properties>
@@ -83,6 +86,26 @@
                     <includes>
                         <include>**/*.java</include>
                     </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless-plugin.version}</version>
+                <configuration>
+                    <java>
+                        <includes>
+                            <include>src/main/**/*.java</include>
+                            <include>src/test/**/*.java</include>
+                        </includes>
+                        <importOrder>
+                            <order>java,javax,org,com</order>
+                        </importOrder>
+                        <removeUnusedImports/>
+                        <eclipse>
+                            <file>${rootDir}/eclipse-java-google-style.xml</file>
+                        </eclipse>
+                    </java>
                 </configuration>
             </plugin>
         </plugins>
