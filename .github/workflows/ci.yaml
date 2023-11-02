@@ -67,4 +67,4 @@ jobs:
           java-version: '21'
 
       - name: Check Code Style
-        run: mvn checkstyle:check
+        run: mvn spotless:check
