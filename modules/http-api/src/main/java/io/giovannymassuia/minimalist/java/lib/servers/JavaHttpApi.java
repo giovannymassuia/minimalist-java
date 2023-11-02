@@ -1,12 +1,20 @@
+/*
+ * Copyright 2023 minimalist-java
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.giovannymassuia.minimalist.java.lib.servers;
 
-import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-import io.giovannymassuia.minimalist.java.lib.HttpContext;
-import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route;
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -18,6 +26,15 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.gson.Gson;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+
+import io.giovannymassuia.minimalist.java.lib.HttpContext;
+import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
+import io.giovannymassuia.minimalist.java.lib.Route;
+import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 
 class JavaHttpApi implements ApiServer {
 
@@ -49,9 +66,9 @@ class JavaHttpApi implements ApiServer {
             List<RoutePath> routePaths = route.pathsByMethod(Route.RouteMethod.valueOf(method));
 
             Optional<RoutePath> routePath = routePaths.stream()
-                .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
-                    extractedPathParams))
-                .findFirst();
+                            .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
+                                            extractedPathParams))
+                            .findFirst();
 
             if (routePath.isEmpty()) {
                 try {
@@ -60,8 +77,8 @@ class JavaHttpApi implements ApiServer {
                     throw new RuntimeException(e);
                 }
             } else {
-                HttpContext httpContext = new HttpContext(extractedPathParams,
-                    extractedQueryParams);
+                HttpContext httpContext =
+                                new HttpContext(extractedPathParams, extractedQueryParams);
                 ResponseEntity<?> response = routePath.get().handler().apply(httpContext);
                 sendResponse(exchange, response);
             }
@@ -118,7 +135,7 @@ class JavaHttpApi implements ApiServer {
     }
 
     private void sendResponse(HttpExchange exchange, String response, int statusCode)
-        throws IOException {
+                    throws IOException {
         if (response == null) {
             exchange.sendResponseHeaders(statusCode, -1);
             return;
@@ -131,7 +148,7 @@ class JavaHttpApi implements ApiServer {
     }
 
     private void sendResponse(HttpExchange exchange, ResponseEntity<?> responseEntity)
-        throws IOException {
+                    throws IOException {
         String response = responseEntity.body() != null ? toJson(responseEntity.body()) : null;
 
         // set json content type

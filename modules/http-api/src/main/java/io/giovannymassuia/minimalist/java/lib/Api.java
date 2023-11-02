@@ -15,8 +15,9 @@
  */
 package io.giovannymassuia.minimalist.java.lib;
 
-import io.giovannymassuia.minimalist.java.lib.servers.ApiServer;
 import java.util.logging.Logger;
+
+import io.giovannymassuia.minimalist.java.lib.servers.ApiServer;
 
 public class Api {
 
@@ -41,8 +42,8 @@ public class Api {
 
     public void start() {
         apiServer.start();
-        logger.info(
-            "Server [%s] started on port %d".formatted(apiServer.getClass().getSimpleName(), port));
+        logger.info("Server [%s] started on port %d".formatted(apiServer.getClass().getSimpleName(),
+                        port));
     }
 
 }
