@@ -1,19 +1,23 @@
 package io.giovannymassuia.framework.http;
 
-import com.sun.net.httpserver.HttpServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static io.giovannymassuia.framework.http.Utils.extractQueryParameters;
+import static io.giovannymassuia.framework.http.Utils.isPathMatching;
+import static io.giovannymassuia.framework.http.Utils.sendResponse;
 
+import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import static io.giovannymassuia.framework.http.Utils.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WebServer {
+
     private final Logger logger = LoggerFactory.getLogger(WebServer.class);
 
     private final HttpServer server;
@@ -44,11 +48,13 @@ public class WebServer {
 
                 logger.debug("Received {} request for {}", method, uri);
 
-                List<Route.RoutePath> routePaths = route.pathsByMethod(Route.RouteMethod.valueOf(method));
+                List<Route.RoutePath> routePaths = route.pathsByMethod(
+                    Route.RouteMethod.valueOf(method));
 
                 Optional<Route.RoutePath> routePath = routePaths.stream()
-                        .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri, extractedPathParams))
-                        .findFirst();
+                    .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
+                        extractedPathParams))
+                    .findFirst();
 
                 if (routePath.isEmpty()) {
                     try {
@@ -57,7 +63,8 @@ public class WebServer {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    HttpContext httpContext = new HttpContext(exchange, extractedPathParams, extractedQueryParams);
+                    HttpContext httpContext = new HttpContext(exchange, extractedPathParams,
+                        extractedQueryParams);
                     ResponseEntity<?> response = routePath.get().handler().apply(httpContext);
                     sendResponse(exchange, response);
                 }
