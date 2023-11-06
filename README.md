@@ -1,7 +1,14 @@
-# Minimalist Java
+# Minimalist Java - 🚧 wip
 
-Minimalist Java is a collection of lightweight Java libraries aiming to simplify and streamline your Java development.
-This project is structured as a monorepo, containing multiple individual libraries that can be used independently or
+> ## 👷🏗️ Under development
+> This project is under development and is not ready for use.
+
+---
+
+Minimalist Java is a collection of lightweight Java libraries aiming to simplify and streamline your
+Java development.
+This project is structured as a monorepo, containing multiple individual libraries that can be used
+independently or
 together for a cohesive development experience.
 
 [![Release](https://github.com/giovannymassuia/minimalist-java/actions/workflows/publish.yaml/badge.svg)](https://github.com/giovannymassuia/minimalist-java/actions/workflows/publish.yaml)
@@ -11,7 +18,8 @@ together for a cohesive development experience.
 
 ## Modules
 
-1. **Minimalist Http API (`http-api`)**: Provides essential API functionalities for Java applications.
+1. **Minimalist Http API (`http-api`)**: Provides essential API functionalities for Java
+   applications.
 2. **Minimalist Dependency Injection (`di`)**: A lightweight solution for dependency injection
    in Java.
 
@@ -23,7 +31,8 @@ To use `minimalist-java` in your Maven project, follow the steps below:
 
 ### 1. Authenticate with GitHub Packages
 
-Before you can use or install packages from the GitHub Package Registry, you need to authenticate. GitHub Packages only
+Before you can use or install packages from the GitHub Package Registry, you need to authenticate.
+GitHub Packages only
 supports authentication via the personal access token at this time.
 
 Add the following to your `~/.m2/settings.xml`:
@@ -39,8 +48,10 @@ Add the following to your `~/.m2/settings.xml`:
 </servers>
 ```
 
-Replace `YOUR_GITHUB_USERNAME` with your GitHub username and `YOUR_PERSONAL_ACCESS_TOKEN` with a personal access token
-that has the `read:packages` scope (also ensure you have the `repo` and `write:packages` scopes if you plan to publish
+Replace `YOUR_GITHUB_USERNAME` with your GitHub username and `YOUR_PERSONAL_ACCESS_TOKEN` with a
+personal access token
+that has the `read:packages` scope (also ensure you have the `repo` and `write:packages` scopes if
+you plan to publish
 packages).
 
 ### 2. Add the Repository
@@ -76,7 +87,8 @@ Replace `LATEST_VERSION` with the desired version of the library.
 
 ### 4. (Optional) Using the BOM
 
-If you're planning to use multiple modules from `minimalist-java`, consider adding the BOM (Bill of Materials) to your
+If you're planning to use multiple modules from `minimalist-java`, consider adding the BOM (Bill of
+Materials) to your
 project. It will help manage versions for you.
 
 Add the BOM to your `dependencyManagement` section:
@@ -96,7 +108,8 @@ Add the BOM to your `dependencyManagement` section:
 </dependencyManagement>
 ```
 
-Now, when adding individual `minimalist-java` modules to your dependencies, you don't need to specify their versions:
+Now, when adding individual `minimalist-java` modules to your dependencies, you don't need to
+specify their versions:
 
 ```xml
 
@@ -130,8 +143,10 @@ mvn versions:revert
 
 ## Contributing
 
-If you'd like to contribute to Minimalist Java, please read our [contributing guidelines](CONTRIBUTING.md).
+If you'd like to contribute to Minimalist Java, please read
+our [contributing guidelines](CONTRIBUTING.md).
 
 ## License
 
-`minimalist-java` is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+`minimalist-java` is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for
+details.

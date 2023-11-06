@@ -15,14 +15,20 @@
  */
 package io.giovannymassuia.minimalist.java;
 
+import io.giovannymassuia.minimalist.java.lib.Api;
+import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
+import io.giovannymassuia.minimalist.java.lib.Route;
+import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
+import java.util.Map;
+
 public class Main {
 
     public static void main(String[] args) {
-        // Api.create(8080)
-        // .addRoute(Route.builder("/")
-        // .path(RouteMethod.GET, "/",
-        // ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
-        // .start();
+        Api.create(8080)
+            .addRoute(Route.builder("/")
+                .path(RouteMethod.GET, "/",
+                    ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
+            .start();
     }
 
 }
