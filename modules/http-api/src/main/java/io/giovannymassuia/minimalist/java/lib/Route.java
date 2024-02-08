@@ -21,15 +21,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public record Route(String rootPath, Map<RouteMethod, List<RoutePath>> paths) {
+public record Route(String rootPath,Map<RouteMethod,List<RoutePath>>paths){
 
-    public record RoutePath(String httpMethod, String pathPattern,
-                            Function<HttpContext, ResponseEntity<?>> handler) {
+public record RoutePath(String httpMethod,String pathPattern,Function<HttpContext,ResponseEntity<?>>handler){
 
-    }
+}
 
-    public enum RouteMethod {
-        GET, POST, PUT, DELETE
+public enum RouteMethod {
+    GET, POST, PUT, DELETE
+
     }
 
     public static Route builder(String rootPath) {
@@ -37,9 +37,9 @@ public record Route(String rootPath, Map<RouteMethod, List<RoutePath>> paths) {
     }
 
     public Route path(RouteMethod method, String pathPattern,
-        Function<HttpContext, ResponseEntity<?>> handler) {
+                    Function<HttpContext, ResponseEntity<?>> handler) {
         paths.computeIfAbsent(method, k -> new ArrayList<>())
-            .add(new RoutePath(method.name(), pathPattern, handler));
+                        .add(new RoutePath(method.name(), pathPattern, handler));
         return this;
     }
 

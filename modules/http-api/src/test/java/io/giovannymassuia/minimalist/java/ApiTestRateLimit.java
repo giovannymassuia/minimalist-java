@@ -17,18 +17,20 @@ package io.giovannymassuia.minimalist.java;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route;
-import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
-import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimitFactory;
-import io.giovannymassuia.minimalist.java.lib.servers.Api;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
+import io.giovannymassuia.minimalist.java.lib.Route;
+import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
+import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimitFactory;
+import io.giovannymassuia.minimalist.java.lib.servers.Api;
 
 class ApiTestRateLimit {
 
@@ -37,23 +39,22 @@ class ApiTestRateLimit {
     @BeforeEach
     void setUp() {
         randomPort = (int) (Math.random() * 10000) + 10000;
-        Api.create(randomPort)
-            .rateLimit(RateLimitFactory.blockAllRequests())
-            .addRoute(Route.builder("/api")
-                .path(RouteMethod.GET, "/",
-                    ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
-            .start();
+        Api.create(randomPort).rateLimit(RateLimitFactory.blockAllRequests())
+                        .addRoute(Route.builder("/api").path(RouteMethod.GET, "/",
+                                        ctx -> ResponseEntity
+                                                        .ok(Map.of("message", "Hello World!"))))
+                        .start();
     }
 
     @Test
     void testJavaHttpApi() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(java.net.URI.create("http://localhost:" + randomPort + "/api")).GET()
-            .build();
+                        .uri(java.net.URI.create("http://localhost:" + randomPort + "/api")).GET()
+                        .build();
 
         try (var client = HttpClient.newHttpClient()) {
             HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
+                            client.send(request, HttpResponse.BodyHandlers.ofString());
 
             assertEquals(429, response.statusCode());
             assertEquals("Too many requests.", response.body());

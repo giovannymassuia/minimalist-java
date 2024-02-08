@@ -15,9 +15,10 @@
  */
 package io.giovannymassuia.minimalist.java.lib.servers;
 
+import java.util.logging.Logger;
+
 import io.giovannymassuia.minimalist.java.lib.Route;
 import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimiter;
-import java.util.logging.Logger;
 
 public class Api {
 
@@ -48,7 +49,7 @@ public class Api {
     public void start() {
         apiServer.start();
         logger.info("Server [%s] started on port %d".formatted(apiServer.getClass().getSimpleName(),
-            port));
+                        port));
     }
 
 }
