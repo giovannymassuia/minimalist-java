@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
 import io.giovannymassuia.minimalist.java.lib.Route;
 import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
+import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimitFactory;
 import io.giovannymassuia.minimalist.java.lib.servers.Api;
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -29,7 +30,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ApiTest {
+class ApiTestRateLimit {
 
     private int randomPort;
 
@@ -37,12 +38,10 @@ class ApiTest {
     void setUp() {
         randomPort = (int) (Math.random() * 10000) + 10000;
         Api.create(randomPort)
+            .rateLimit(RateLimitFactory.blockAllRequests())
             .addRoute(Route.builder("/api")
                 .path(RouteMethod.GET, "/",
-                    ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
-                .path(RouteMethod.GET, "/{name}",
-                    ctx -> ResponseEntity.ok(Map.of("message",
-                        "Hello " + ctx.pathParams().get("name")))))
+                    ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
             .start();
     }
 
@@ -56,24 +55,9 @@ class ApiTest {
             HttpResponse<String> response =
                 client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            assertEquals(200, response.statusCode());
-            assertEquals("{\"message\":\"Hello World!\"}", response.body());
+            assertEquals(429, response.statusCode());
+            assertEquals("Too many requests.", response.body());
         }
     }
 
-    @Test
-    void testJavaHttpApiPathParam() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(java.net.URI
-                .create("http://localhost:" + randomPort + "/api/john-doe"))
-            .GET().build();
-
-        try (var client = HttpClient.newHttpClient()) {
-            HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            assertEquals(200, response.statusCode());
-            assertEquals("{\"message\":\"Hello john-doe\"}", response.body());
-        }
-    }
 }

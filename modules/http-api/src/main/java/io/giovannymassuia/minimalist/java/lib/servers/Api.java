@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.giovannymassuia.minimalist.java.lib;
+package io.giovannymassuia.minimalist.java.lib.servers;
 
+import io.giovannymassuia.minimalist.java.lib.Route;
+import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimiter;
 import java.util.logging.Logger;
-
-import io.giovannymassuia.minimalist.java.lib.servers.ApiServer;
 
 public class Api {
 
@@ -40,10 +40,15 @@ public class Api {
         return this;
     }
 
+    public Api rateLimit(RateLimiter rateLimiter) {
+        apiServer.setRateLimiter(rateLimiter);
+        return this;
+    }
+
     public void start() {
         apiServer.start();
         logger.info("Server [%s] started on port %d".formatted(apiServer.getClass().getSimpleName(),
-                        port));
+            port));
     }
 
 }

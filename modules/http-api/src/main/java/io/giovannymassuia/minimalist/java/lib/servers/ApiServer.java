@@ -16,18 +16,28 @@
 package io.giovannymassuia.minimalist.java.lib.servers;
 
 import io.giovannymassuia.minimalist.java.lib.Route;
+import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimiter;
 
-public interface ApiServer {
+public abstract class ApiServer {
 
-    void create(int port);
+    protected RateLimiter rateLimiter;
 
-    void addRoute(Route route);
+    protected ApiServer() {
+    }
 
-    void start();
+    abstract void create(int port);
+
+    abstract void addRoute(Route route);
+
+    abstract void start();
 
     static ApiServer defaultServer(int port) {
-        var api = new JavaHttpApi();
+        ApiServer api = new JavaHttpApi();
         api.create(port);
         return api;
+    }
+
+    void setRateLimiter(RateLimiter rateLimiter) {
+        this.rateLimiter = rateLimiter;
     }
 }

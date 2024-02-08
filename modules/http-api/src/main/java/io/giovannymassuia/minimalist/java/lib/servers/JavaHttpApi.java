@@ -15,6 +15,13 @@
  */
 package io.giovannymassuia.minimalist.java.lib.servers;
 
+import com.google.gson.Gson;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+import io.giovannymassuia.minimalist.java.lib.HttpContext;
+import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
+import io.giovannymassuia.minimalist.java.lib.Route;
+import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -23,20 +30,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-
-import io.giovannymassuia.minimalist.java.lib.HttpContext;
-import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route;
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
-
-class JavaHttpApi implements ApiServer {
+class JavaHttpApi extends ApiServer {
 
     private final Logger logger = Logger.getLogger(JavaHttpApi.class.getName());
 
@@ -47,6 +47,11 @@ class JavaHttpApi implements ApiServer {
     public void create(int port) {
         try {
             this.server = HttpServer.create(new InetSocketAddress(port), 0);
+
+//            Executor executor = Executors.newFixedThreadPool(10);
+            Executor executor = Executors.newVirtualThreadPerTaskExecutor();
+
+            this.server.setExecutor(executor);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -55,35 +60,57 @@ class JavaHttpApi implements ApiServer {
     @Override
     public void addRoute(Route route) {
         server.createContext(route.rootPath(), exchange -> {
+
             String method = exchange.getRequestMethod();
             URI uri = exchange.getRequestURI();
 
             Map<String, String> extractedPathParams = new HashMap<>();
             Map<String, String> extractedQueryParams = extractQueryParameters(uri);
 
-            logger.info("Received %s request for %s".formatted(method, uri));
+//            logger.info("Received %s request for %s".formatted(method, uri));
 
             List<RoutePath> routePaths = route.pathsByMethod(Route.RouteMethod.valueOf(method));
 
             Optional<RoutePath> routePath = routePaths.stream()
-                            .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
-                                            extractedPathParams))
-                            .findFirst();
+                .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
+                    extractedPathParams))
+                .findFirst();
 
-            if (routePath.isEmpty()) {
-                try {
-                    sendResponse(exchange, "Not Found", 404);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+            routePath.ifPresentOrElse(
+                path -> {
+                    // check rate limiter
+                    if (rateLimiter != null) {
+                        boolean canHandle = this.rateLimiter.check(path);
+
+                        if (!canHandle) {
+                            try {
+                                sendResponse(exchange, "Too many requests.", 429);
+                                return;
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+
+                    HttpContext httpContext = new HttpContext(extractedPathParams,
+                        extractedQueryParams);
+                    ResponseEntity<?> response = path.handler().apply(httpContext);
+                    try {
+                        sendResponse(exchange, response);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                },
+                () -> {
+                    try {
+                        sendResponse(exchange, "Not Found", 404);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            } else {
-                HttpContext httpContext =
-                                new HttpContext(extractedPathParams, extractedQueryParams);
-                ResponseEntity<?> response = routePath.get().handler().apply(httpContext);
-                sendResponse(exchange, response);
-            }
+            );
 
-            logger.info("Response sent with status: %s".formatted(exchange.getResponseCode()));
+//            logger.info("Response sent with status: %s".formatted(exchange.getResponseCode()));
         });
     }
 
@@ -135,7 +162,7 @@ class JavaHttpApi implements ApiServer {
     }
 
     private void sendResponse(HttpExchange exchange, String response, int statusCode)
-                    throws IOException {
+        throws IOException {
         if (response == null) {
             exchange.sendResponseHeaders(statusCode, -1);
             return;
@@ -148,7 +175,7 @@ class JavaHttpApi implements ApiServer {
     }
 
     private void sendResponse(HttpExchange exchange, ResponseEntity<?> responseEntity)
-                    throws IOException {
+        throws IOException {
         String response = responseEntity.body() != null ? toJson(responseEntity.body()) : null;
 
         // set json content type

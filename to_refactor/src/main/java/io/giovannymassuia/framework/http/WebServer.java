@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +28,10 @@ public class WebServer {
     public WebServer(int port) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
 
-//        Executor executor = Executors.newFixedThreadPool(5);
+        Executor executor = Executors.newFixedThreadPool(6);
 //        Executor executor = Executors.newVirtualThreadPerTaskExecutor();
 
-//        this.server.setExecutor(executor);
+        this.server.setExecutor(executor);
     }
 
     public WebServer addRoute(Route route) {

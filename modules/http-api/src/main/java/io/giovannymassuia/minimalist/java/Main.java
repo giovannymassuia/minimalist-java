@@ -15,19 +15,23 @@
  */
 package io.giovannymassuia.minimalist.java;
 
-import io.giovannymassuia.minimalist.java.lib.Api;
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
 import io.giovannymassuia.minimalist.java.lib.Route;
 import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
+import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimitFactory;
+import io.giovannymassuia.minimalist.java.lib.servers.Api;
 import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) {
         Api.create(8080)
+            .rateLimit(RateLimitFactory.defaultSlidingWindowLog())
             .addRoute(Route.builder("/")
                 .path(RouteMethod.GET, "/",
-                    ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
+                    ctx -> {
+                        return ResponseEntity.ok(Map.of("message", "Hello World!"));
+                    }))
             .start();
     }
 
