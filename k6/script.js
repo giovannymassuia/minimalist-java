@@ -2,8 +2,8 @@ import http from 'k6/http';
 import {check, sleep} from 'k6';
 
 export const options = {
-  vus: 5,
-  duration: '30s',
+  vus: 5, // users at the same time
+  duration: '15s',
 };
 
 export default function () {
@@ -11,5 +11,5 @@ export default function () {
   check(res, {
     'is status 200': (r) => r.status === 200,
   });
-  sleep(5);
+  sleep(1);
 }

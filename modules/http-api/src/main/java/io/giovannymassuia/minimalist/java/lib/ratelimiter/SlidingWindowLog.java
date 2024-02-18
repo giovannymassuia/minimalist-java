@@ -15,13 +15,12 @@
  */
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
+import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
-
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 
 class SlidingWindowLog implements RateLimiter {
 
@@ -39,12 +38,11 @@ class SlidingWindowLog implements RateLimiter {
         this(DEFAULT_CAPACITY, DEFAULT_THRESHOLD_SECONDS);
     }
 
-    SlidingWindowLog(Integer capacity, Integer thresholdSeconds) {
-
-        if (capacity == null || capacity <= 0) {
+    SlidingWindowLog(int capacity, int thresholdSeconds) {
+        if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity should not be less than 0.");
         }
-        if (thresholdSeconds == null || thresholdSeconds <= 1) {
+        if (thresholdSeconds <= 1) {
             throw new IllegalArgumentException("Capacity should not be less than 1 second.");
         }
 
@@ -59,7 +57,7 @@ class SlidingWindowLog implements RateLimiter {
 
         synchronized (windowLog) {
             while (!windowLog.isEmpty()
-                            && windowLog.peek() < (timestamp - (thresholdSeconds * 1000L))) {
+                && windowLog.peek() < (timestamp - (thresholdSeconds * 1000L))) {
                 windowLog.poll();
             }
 
@@ -67,7 +65,7 @@ class SlidingWindowLog implements RateLimiter {
                 windowLog.add(timestamp);
             } else {
                 logger.info("windowLog at capacity [%d]. Head timestamp [%d]"
-                                .formatted(getWindowSize(), windowLog.peek()));
+                    .formatted(getWindowSize(), windowLog.peek()));
             }
         }
 

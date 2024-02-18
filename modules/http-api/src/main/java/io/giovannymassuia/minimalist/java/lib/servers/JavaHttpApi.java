@@ -15,6 +15,13 @@
  */
 package io.giovannymassuia.minimalist.java.lib.servers;
 
+import com.google.gson.Gson;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+import io.giovannymassuia.minimalist.java.lib.HttpContext;
+import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
+import io.giovannymassuia.minimalist.java.lib.Route;
+import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -28,15 +35,6 @@ import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-
-import io.giovannymassuia.minimalist.java.lib.HttpContext;
-import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route;
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 
 class JavaHttpApi extends ApiServer {
 
@@ -74,9 +72,9 @@ class JavaHttpApi extends ApiServer {
             List<RoutePath> routePaths = route.pathsByMethod(Route.RouteMethod.valueOf(method));
 
             Optional<RoutePath> routePath = routePaths.stream()
-                            .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
-                                            extractedPathParams))
-                            .findFirst();
+                .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
+                    extractedPathParams))
+                .findFirst();
 
             routePath.ifPresentOrElse(path -> {
                 // check rate limiter
@@ -94,7 +92,7 @@ class JavaHttpApi extends ApiServer {
                 }
 
                 HttpContext httpContext =
-                                new HttpContext(extractedPathParams, extractedQueryParams);
+                    new HttpContext(extractedPathParams, extractedQueryParams);
                 ResponseEntity<?> response = path.handler().apply(httpContext);
                 try {
                     sendResponse(exchange, response);
@@ -161,7 +159,7 @@ class JavaHttpApi extends ApiServer {
     }
 
     private void sendResponse(HttpExchange exchange, String response, int statusCode)
-                    throws IOException {
+        throws IOException {
         if (response == null) {
             exchange.sendResponseHeaders(statusCode, -1);
             return;
@@ -174,7 +172,7 @@ class JavaHttpApi extends ApiServer {
     }
 
     private void sendResponse(HttpExchange exchange, ResponseEntity<?> responseEntity)
-                    throws IOException {
+        throws IOException {
         String response = responseEntity.body() != null ? toJson(responseEntity.body()) : null;
 
         // set json content type

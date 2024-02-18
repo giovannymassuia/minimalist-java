@@ -15,6 +15,8 @@
  */
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
+import java.time.Duration;
+
 public class RateLimitFactory {
 
     public static RateLimiter blockAllRequests() {
@@ -27,5 +29,13 @@ public class RateLimitFactory {
 
     public static RateLimiter customSlidingWindowLog(int capacity, int thresholdSeconds) {
         return new SlidingWindowLog(capacity, thresholdSeconds);
+    }
+
+    public static RateLimiter defaultTokenBucket() {
+        return new TokenBucket();
+    }
+
+    public static RateLimiter customTokenBucket(int bucketSize, Duration refillRate) {
+        return new TokenBucket(bucketSize, refillRate);
     }
 }
