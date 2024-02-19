@@ -47,12 +47,29 @@ public class RateLimitFactory {
         return new LeakingBucket(bucketSize, leakRate);
     }
 
-
     public static RateLimiter defaultFixedWindowCounter() {
         return new FixedWindowCounter();
     }
 
     public static RateLimiter customFixedWindowCounter(int maxRequests, Duration windowSize) {
         return new FixedWindowCounter(maxRequests, windowSize);
+    }
+
+    public static RateLimiter defaultSlidingWindowCounterSlots() {
+        return new SlidingWindowCounterSlots();
+    }
+
+    public static RateLimiter customSlidingWindowCounterSlots(int maxRequests,
+                    Duration windowSize) {
+        return new SlidingWindowCounterSlots(maxRequests, windowSize);
+    }
+
+    public static RateLimiter defaultSlidingWindowCounterApproximate() {
+        return new SlidingWindowCounterApproximate();
+    }
+
+    public static RateLimiter customSlidingWindowCounterApproximate(int maxRequests,
+                    Duration windowSize) {
+        return new SlidingWindowCounterApproximate(maxRequests, windowSize);
     }
 }
