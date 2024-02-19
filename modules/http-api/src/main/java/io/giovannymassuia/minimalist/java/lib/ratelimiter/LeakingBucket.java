@@ -53,7 +53,7 @@ class LeakingBucket implements RateLimiter {
             throw new IllegalArgumentException("Refill rate should not be null.");
         }
         this.bucketSize = bucketSize;
-        this.leakRateInMillis = leakRate.getSeconds() * 1000;
+        this.leakRateInMillis = leakRate.toMillis();
 
         this.bucketQueue = new LinkedBlockingQueue<>(bucketSize);
         this.currentQueueSize = new AtomicInteger(0);

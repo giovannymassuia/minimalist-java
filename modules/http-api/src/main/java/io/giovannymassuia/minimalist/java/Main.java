@@ -15,22 +15,22 @@
  */
 package io.giovannymassuia.minimalist.java;
 
-import java.time.Duration;
-import java.util.Map;
-
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
 import io.giovannymassuia.minimalist.java.lib.Route;
 import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
 import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimitFactory;
 import io.giovannymassuia.minimalist.java.lib.servers.Api;
+import java.time.Duration;
+import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) {
-        Api.create(8080).rateLimit(RateLimitFactory.customLeakingBucket(3, Duration.ofSeconds(2)))
-                        .addRoute(Route.builder("/").path(RouteMethod.GET, "/", ctx -> {
-                            return ResponseEntity.ok(Map.of("message", "Hello World!"));
-                        })).start();
+        Api.create(8080)
+            .rateLimit(RateLimitFactory.customFixedWindowCounter(3, Duration.ofSeconds(1)))
+            .addRoute(Route.builder("/").path(RouteMethod.GET, "/", ctx -> {
+                return ResponseEntity.ok(Map.of("message", "Hello World!"));
+            })).start();
     }
 
 }

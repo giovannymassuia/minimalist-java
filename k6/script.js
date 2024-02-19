@@ -10,6 +10,7 @@ export default function () {
   const res = http.get('http://localhost:8080');
   check(res, {
     'is status 200': (r) => r.status === 200,
+    // 'is status 429': (r) => r.status === 429,
   });
   sleep(1);
 }

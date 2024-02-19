@@ -44,7 +44,7 @@ class TokenBucket implements RateLimiter {
             throw new IllegalArgumentException("Refill rate should not be null.");
         }
         this.bucketSize = bucketSize;
-        this.refillRateMilliseconds = refillRate.getSeconds() * 1000;
+        this.refillRateMilliseconds = refillRate.toMillis();
 
         this.bucket = new AtomicInteger(bucketSize);
         this.lastRefillTimestamp = new AtomicLong(System.currentTimeMillis());

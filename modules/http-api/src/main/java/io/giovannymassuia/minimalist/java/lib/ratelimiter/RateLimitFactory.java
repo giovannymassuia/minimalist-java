@@ -46,4 +46,13 @@ public class RateLimitFactory {
     public static RateLimiter customLeakingBucket(int bucketSize, Duration leakRate) {
         return new LeakingBucket(bucketSize, leakRate);
     }
+
+
+    public static RateLimiter defaultFixedWindowCounter() {
+        return new FixedWindowCounter();
+    }
+
+    public static RateLimiter customFixedWindowCounter(int maxRequests, Duration windowSize) {
+        return new FixedWindowCounter(maxRequests, windowSize);
+    }
 }
