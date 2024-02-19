@@ -27,8 +27,8 @@ public class RateLimitFactory {
         return new SlidingWindowLog();
     }
 
-    public static RateLimiter customSlidingWindowLog(int capacity, int thresholdSeconds) {
-        return new SlidingWindowLog(capacity, thresholdSeconds);
+    public static RateLimiter customSlidingWindowLog(int capacity, Duration threshold) {
+        return new SlidingWindowLog(capacity, threshold);
     }
 
     public static RateLimiter defaultTokenBucket() {

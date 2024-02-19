@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Duration;
+
 import org.junit.jupiter.api.Test;
 
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
@@ -29,7 +31,7 @@ class SlidingWindowLogTest {
 
     @Test
     void check() throws InterruptedException {
-        RateLimiter rl = RateLimitFactory.customSlidingWindowLog(3, 3);
+        RateLimiter rl = RateLimitFactory.customSlidingWindowLog(3, Duration.ofSeconds(3));
 
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t1
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t2

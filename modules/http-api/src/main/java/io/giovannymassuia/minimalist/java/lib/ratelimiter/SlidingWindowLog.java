@@ -15,10 +15,12 @@
  */
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
-import java.time.Instant;
-import java.util.Date;
+import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
@@ -28,54 +30,78 @@ class SlidingWindowLog implements RateLimiter {
     private final Logger logger = Logger.getLogger(SlidingWindowLog.class.getName());
 
     private static final int DEFAULT_CAPACITY = 10;
-    private static final int DEFAULT_THRESHOLD_SECONDS = 10;
+    private static final Duration DEFAULT_THRESHOLD = Duration.ofSeconds(10);
 
     private final int capacity;
-    private final int thresholdSeconds;
+    private final long thresholdMilliseconds;
 
     private final BlockingQueue<Long> windowLog;
 
+    private final ScheduledExecutorService scheduler;
+
     SlidingWindowLog() {
-        this(DEFAULT_CAPACITY, DEFAULT_THRESHOLD_SECONDS);
+        this(DEFAULT_CAPACITY, DEFAULT_THRESHOLD);
     }
 
-    SlidingWindowLog(int capacity, int thresholdSeconds) {
+    SlidingWindowLog(int capacity, Duration threshold) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity should not be less than 0.");
         }
-        if (thresholdSeconds <= 1) {
-            throw new IllegalArgumentException("Capacity should not be less than 1 second.");
+        if (threshold == null) {
+            throw new IllegalArgumentException("Threshold should not be null.");
         }
 
         this.capacity = capacity;
-        this.thresholdSeconds = thresholdSeconds;
-        this.windowLog = new LinkedBlockingQueue<>();
+        this.thresholdMilliseconds = threshold.toMillis();
+        this.windowLog = new LinkedBlockingQueue<>(capacity);
+
+        this.scheduler = Executors.newScheduledThreadPool(1);
+        // Cleanup at half the window size
+        long cleanupInterval = thresholdMilliseconds / 2;
+        // Schedule the cleanup task to run periodically
+        scheduler.scheduleAtFixedRate(this::cleanupOldRequests, cleanupInterval, cleanupInterval,
+                        TimeUnit.MILLISECONDS);
     }
 
     @Override
     public boolean checkAndProcess(RoutePath routePath, Runnable requestRunnable) {
-        long timestamp = Date.from(Instant.now()).getTime();
+        long now = System.currentTimeMillis();
+        boolean allowRequest = false;
 
-        synchronized (windowLog) {
-            while (!windowLog.isEmpty()
-                            && windowLog.peek() < (timestamp - (thresholdSeconds * 1000L))) {
-                windowLog.poll();
-            }
-
-            if (windowLog.size() <= capacity) {
-                windowLog.add(timestamp);
+        synchronized (this) {
+            if (windowLog.size() < capacity) {
+                windowLog.add(now);
+                allowRequest = true;
             } else {
                 logger.info("windowLog at capacity [%d]. Head timestamp [%d]"
                                 .formatted(getWindowSize(), windowLog.peek()));
             }
         }
 
-        return processRequest(windowLog.size() <= capacity, requestRunnable);
+        return processRequest(allowRequest, requestRunnable);
+    }
+
+    private void cleanupOldRequests() {
+        long now = System.currentTimeMillis();
+        while (!windowLog.isEmpty() && windowLog.peek() < (now - thresholdMilliseconds)) {
+            windowLog.poll();
+        }
     }
 
     @Override
     public void shutdownGracefully() {
+        System.out.println("Shutting down " + this.getClass().getSimpleName() + "...");
 
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+        }
+
+        System.out.println(this.getClass().getSimpleName() + " terminated scheduler.");
     }
 
     int getWindowSize() {
