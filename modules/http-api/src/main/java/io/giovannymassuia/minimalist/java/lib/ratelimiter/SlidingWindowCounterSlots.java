@@ -26,11 +26,10 @@ class SlidingWindowCounterSlots implements RateLimiter {
 
     private static final int DEFAULT_MAX_REQUESTS = 10;
     private static final Duration DEFAULT_WINDOW_SIZE = Duration.ofSeconds(1);
-    private static final int SLOTS = 10; // Number of slots in the window
+    private static final int SLOTS = 6; // Number of slots in the window
 
     private final int maxRequestsPerWindow;
     private final long windowSizeMillis;
-    private final long slotSizeMillis;
 
     private final Queue<Integer> slots;
     private final Object lock = new Object();
@@ -51,7 +50,6 @@ class SlidingWindowCounterSlots implements RateLimiter {
 
         this.maxRequestsPerWindow = maxRequests;
         this.windowSizeMillis = windowSize.toMillis();
-        this.slotSizeMillis = windowSizeMillis / SLOTS;
         this.lastCleanup = new AtomicLong(System.currentTimeMillis());
 
         this.slots = new LinkedList<>();
