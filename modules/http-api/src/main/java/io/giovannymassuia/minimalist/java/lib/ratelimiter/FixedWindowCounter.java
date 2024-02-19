@@ -1,9 +1,25 @@
+/*
+ * Copyright 2024 minimalist-java
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 
 class FixedWindowCounter implements RateLimiter {
 
@@ -44,7 +60,7 @@ class FixedWindowCounter implements RateLimiter {
         long currentWindowStart = now - (now % windowSizeMillis);
 
         if (windowStart.get() != currentWindowStart
-            && windowStart.compareAndSet(windowStart.get(), currentWindowStart)) {
+                        && windowStart.compareAndSet(windowStart.get(), currentWindowStart)) {
             requestCount.set(0); // Start of a new window, reset the counter
         }
 
@@ -58,8 +74,7 @@ class FixedWindowCounter implements RateLimiter {
     }
 
     @Override
-    public void shutdownGracefully() {
-    }
+    public void shutdownGracefully() {}
 
     public int getAvailableTokensCount() {
         return maxRequests - requestCount.get();
