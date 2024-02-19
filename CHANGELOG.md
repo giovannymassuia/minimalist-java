@@ -21,6 +21,19 @@ from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
         - T2 → Bucket has 3 tokens, more 3 requests arrive taking the remaining 3 tokens
         - T3 → Bucket is empty, new requests are dropped at this time
         - T4 → 4 tokens are refilled (this happens based on the refill rate set)
+- `leaking bucket` rate limit implemenation
+    - custom parameters for `bucketSize` and `leakRate`
+    - global bucket
+        - for now the implementation is global for all requests
+        - how it works
+            - T0 -> say bucket starts with 4 tokens, and leak rate is 2 seconds
+            - T1 -> one request arrives, and is added to the bucket queue
+            - T2 -> 2s has passed since last leak, request is pulled from queue respecting the 2
+              seconds rate and processed
+            - T3 -> 5 requests arrive at the same time, only 4 are added to the queue, and 1 is
+              dropped
+            - Tn -> every 2s the requests will be processed, so for 4 requests it could take up 8s
+              to process all of them (4 req x 2 seconds for each leak)
 
 ## [0.0.10-beta] - 2023-11-01
 

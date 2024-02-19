@@ -52,7 +52,7 @@ class SlidingWindowLog implements RateLimiter {
     }
 
     @Override
-    public boolean check(RoutePath routePath) {
+    public boolean checkAndProcess(RoutePath routePath, Runnable requestRunnable) {
         long timestamp = Date.from(Instant.now()).getTime();
 
         synchronized (windowLog) {
@@ -69,7 +69,12 @@ class SlidingWindowLog implements RateLimiter {
             }
         }
 
-        return windowLog.size() <= capacity;
+        return processRequest(windowLog.size() <= capacity, requestRunnable);
+    }
+
+    @Override
+    public void shutdownGracefully() {
+
     }
 
     int getWindowSize() {

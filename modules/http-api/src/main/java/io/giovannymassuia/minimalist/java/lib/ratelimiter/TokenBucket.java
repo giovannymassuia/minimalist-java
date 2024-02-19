@@ -35,9 +35,14 @@ class TokenBucket implements RateLimiter {
     }
 
     @Override
-    public boolean check(RoutePath routePath) {
+    public boolean checkAndProcess(RoutePath routePath, Runnable requestRunnable) {
         refill();
-        return bucket.get() > 0 && bucket.decrementAndGet() >= 0;
+        return processRequest(bucket.get() > 0 && bucket.decrementAndGet() >= 0, requestRunnable);
+    }
+
+    @Override
+    public void shutdownGracefully() {
+
     }
 
     private void refill() {

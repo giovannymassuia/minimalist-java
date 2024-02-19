@@ -19,6 +19,14 @@ import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 
 public interface RateLimiter {
 
-    boolean check(RoutePath routePath);
+    boolean checkAndProcess(RoutePath routePath, Runnable requestRunnable);
 
+    default boolean processRequest(boolean canHandle, Runnable requestRunnable) {
+        if (canHandle) {
+            requestRunnable.run();
+        }
+        return canHandle;
+    }
+
+    void shutdownGracefully();
 }

@@ -77,27 +77,30 @@ class JavaHttpApi extends ApiServer {
                 .findFirst();
 
             routePath.ifPresentOrElse(path -> {
+                Runnable requestRunnable = () -> {
+                    HttpContext httpContext =
+                        new HttpContext(extractedPathParams, extractedQueryParams);
+                    ResponseEntity<?> response = path.handler().apply(httpContext);
+                    try {
+                        sendResponse(exchange, response);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                };
+
                 // check rate limiter
                 if (rateLimiter != null) {
-                    boolean canHandle = this.rateLimiter.check(path);
+                    boolean canHandle = this.rateLimiter.checkAndProcess(path, requestRunnable);
 
                     if (!canHandle) {
                         try {
                             sendResponse(exchange, "Too many requests.", 429);
-                            return;
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     }
-                }
-
-                HttpContext httpContext =
-                    new HttpContext(extractedPathParams, extractedQueryParams);
-                ResponseEntity<?> response = path.handler().apply(httpContext);
-                try {
-                    sendResponse(exchange, response);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } else {
+                    requestRunnable.run();
                 }
             }, () -> {
                 try {

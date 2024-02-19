@@ -38,4 +38,12 @@ public class RateLimitFactory {
     public static RateLimiter customTokenBucket(int bucketSize, Duration refillRate) {
         return new TokenBucket(bucketSize, refillRate);
     }
+
+    public static RateLimiter defaultLeakingBucket() {
+        return new LeakingBucket();
+    }
+
+    public static RateLimiter customLeakingBucket(int bucketSize, Duration leakRate) {
+        return new LeakingBucket(bucketSize, leakRate);
+    }
 }
