@@ -19,10 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
+
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
 import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
 import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
-import org.junit.jupiter.api.Test;
 
 class SlidingWindowLogTest {
 
@@ -52,6 +53,5 @@ class SlidingWindowLogTest {
         return new RoutePath(RouteMethod.GET.name(), "/", ctx -> ResponseEntity.ok(""));
     }
 
-    private void emptyRun() {
-    }
+    private void emptyRun() {}
 }

@@ -15,12 +15,13 @@
  */
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
+
+import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 
 class SlidingWindowLog implements RateLimiter {
 
@@ -57,7 +58,7 @@ class SlidingWindowLog implements RateLimiter {
 
         synchronized (windowLog) {
             while (!windowLog.isEmpty()
-                && windowLog.peek() < (timestamp - (thresholdSeconds * 1000L))) {
+                            && windowLog.peek() < (timestamp - (thresholdSeconds * 1000L))) {
                 windowLog.poll();
             }
 
@@ -65,7 +66,7 @@ class SlidingWindowLog implements RateLimiter {
                 windowLog.add(timestamp);
             } else {
                 logger.info("windowLog at capacity [%d]. Head timestamp [%d]"
-                    .formatted(getWindowSize(), windowLog.peek()));
+                                .formatted(getWindowSize(), windowLog.peek()));
             }
         }
 

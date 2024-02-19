@@ -26,6 +26,6 @@ class BlockAllRequests implements RateLimiter {
 
     @Override
     public void shutdownGracefully() {
-        
+
     }
 }
