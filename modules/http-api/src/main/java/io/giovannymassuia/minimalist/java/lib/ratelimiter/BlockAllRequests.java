@@ -20,7 +20,12 @@ import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 class BlockAllRequests implements RateLimiter {
 
     @Override
-    public boolean check(RoutePath routePath) {
+    public boolean checkAndProcess(RoutePath routePath, Runnable requestRunnable) {
         return false;
+    }
+
+    @Override
+    public void shutdownGracefully() {
+
     }
 }

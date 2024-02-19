@@ -36,6 +36,10 @@ public abstract class ApiServer {
         return api;
     }
 
+    RateLimiter getRateLimiter() {
+        return rateLimiter;
+    }
+
     void setRateLimiter(RateLimiter rateLimiter) {
         this.rateLimiter = rateLimiter;
     }

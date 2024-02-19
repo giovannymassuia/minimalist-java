@@ -30,6 +30,16 @@ public class Api {
     private Api(int port, ApiServer apiServer) {
         this.port = port;
         this.apiServer = apiServer;
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutting down API Server gracefully...");
+
+            if (apiServer.getRateLimiter() != null) {
+                apiServer.getRateLimiter().shutdownGracefully();
+            }
+
+            System.out.println("API Server went down successfully...");
+        }));
     }
 
     public static Api create(int port) {

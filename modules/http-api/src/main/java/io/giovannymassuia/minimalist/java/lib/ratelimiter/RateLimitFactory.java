@@ -15,6 +15,8 @@
  */
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
+import java.time.Duration;
+
 public class RateLimitFactory {
 
     public static RateLimiter blockAllRequests() {
@@ -25,7 +27,49 @@ public class RateLimitFactory {
         return new SlidingWindowLog();
     }
 
-    public static RateLimiter customSlidingWindowLog(int capacity, int thresholdSeconds) {
-        return new SlidingWindowLog(capacity, thresholdSeconds);
+    public static RateLimiter customSlidingWindowLog(int capacity, Duration threshold) {
+        return new SlidingWindowLog(capacity, threshold);
+    }
+
+    public static RateLimiter defaultTokenBucket() {
+        return new TokenBucket();
+    }
+
+    public static RateLimiter customTokenBucket(int bucketSize, Duration refillRate) {
+        return new TokenBucket(bucketSize, refillRate);
+    }
+
+    public static RateLimiter defaultLeakingBucket() {
+        return new LeakingBucket();
+    }
+
+    public static RateLimiter customLeakingBucket(int bucketSize, Duration leakRate) {
+        return new LeakingBucket(bucketSize, leakRate);
+    }
+
+    public static RateLimiter defaultFixedWindowCounter() {
+        return new FixedWindowCounter();
+    }
+
+    public static RateLimiter customFixedWindowCounter(int maxRequests, Duration windowSize) {
+        return new FixedWindowCounter(maxRequests, windowSize);
+    }
+
+    public static RateLimiter defaultSlidingWindowCounterSlots() {
+        return new SlidingWindowCounterSlots();
+    }
+
+    public static RateLimiter customSlidingWindowCounterSlots(int maxRequests,
+                    Duration windowSize) {
+        return new SlidingWindowCounterSlots(maxRequests, windowSize);
+    }
+
+    public static RateLimiter defaultSlidingWindowCounterApproximate() {
+        return new SlidingWindowCounterApproximate();
+    }
+
+    public static RateLimiter customSlidingWindowCounterApproximate(int maxRequests,
+                    Duration windowSize) {
+        return new SlidingWindowCounterApproximate(maxRequests, windowSize);
     }
 }
