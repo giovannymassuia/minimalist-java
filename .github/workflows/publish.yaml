@@ -55,6 +55,10 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: |
           mvn versions:set -DnewVersion=${{ env.PROJECT_VERSION }} -DgenerateBackupPoms=false
+          cd ../docs
+          jq '.version = "${{ env.PROJECT_VERSION }}"' current_version.json > current_version.json.temp && mv current_version.json.temp current_version.json
+          rm -f current_version.json.temp
+          cd ../modules
           git commit -am "📦 release: prepare release ${{ env.PROJECT_VERSION }}"
           git tag "release-${{ env.PROJECT_VERSION }}"
           git push origin "release-${{ env.PROJECT_VERSION }}"

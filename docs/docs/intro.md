@@ -2,9 +2,10 @@
 sidebar_position: 1
 ---
 
-# Home
+# Intro
 
-Minimalist Java is a collection of lightweight Java libraries aiming to simplify and streamline your
+Minimalist Java is a collection of lightweight Java libraries aiming to simplify and streamline
+your
 Java development.
 This project is structured as a monorepo, containing multiple individual libraries that can be used
 independently or

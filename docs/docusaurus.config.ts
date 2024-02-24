@@ -1,6 +1,7 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import currentVersion from './current_version.json';
 
 const config: Config = {
   title: 'minimalist-java',
@@ -15,8 +16,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'giovannymassuia', // Usually your GitHub org/user name.
+  projectName: 'minimalist-java', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -43,7 +44,8 @@ const config: Config = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: '0.x.x-beta',
+              label: currentVersion.version,
+              badge: true
             }
           }
 
@@ -86,6 +88,15 @@ const config: Config = {
           label: 'Docs',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownItemsAfter: [
+            {type: 'html', value: '<hr class="dropdown-separator">'},
+            {to: '/versions', label: 'All versions'}
+          ],
+          dropdownActiveClassDisabled: true,
+        },
         {
           href: 'https://github.com/giovannymassuia/minimalist-java',
           label: 'GitHub',
