@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.giovannymassuia.minimalist.java</groupId>
         <artifactId>root</artifactId>
-        <version>0.0.16-beta</version>
+        <version>0.0.17-beta-SNAPSHOT</version>
     </parent>
 
     <artifactId>bom</artifactId>
