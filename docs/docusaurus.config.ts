@@ -56,10 +56,12 @@ const config: Config = {
         },
         blog: {
           showReadingTime: true,
+          readingTime: ({content, defaultReadingTime}) =>
+              defaultReadingTime({content, options: {wordsPerMinute: 100}}),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-              'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // editUrl:
+          //     'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -152,6 +154,7 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+      additionalLanguages: ["java", "scala"],
     },
   } satisfies Preset.ThemeConfig,
 };

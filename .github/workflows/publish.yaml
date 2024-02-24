@@ -19,9 +19,9 @@ jobs:
     name: Publish and Release
     environment: production
     needs: [ ci ]
-    # only if the branch is main and the commit message contains <release:patch|minor|major>
-    #    if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '<release:')
-    if: github.ref == 'refs/heads/main'
+    # only if the branch is main and the commit doesn't contain <skip-release>
+    #    if: github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '<skip-release>')
+    if: github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '<skip-release>')
     runs-on: ubuntu-latest
     permissions:
       contents: write
