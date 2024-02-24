@@ -2,46 +2,32 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Home
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Minimalist Java is a collection of lightweight Java libraries aiming to simplify and streamline your
+Java development.
+This project is structured as a monorepo, containing multiple individual libraries that can be used
+independently or
+together for a cohesive development experience.
 
-## Getting Started
+[![Release](https://github.com/giovannymassuia/minimalist-java/actions/workflows/publish.yaml/badge.svg)](https://github.com/giovannymassuia/minimalist-java/actions/workflows/publish.yaml)
+![GitHub](https://img.shields.io/github/license/giovannymassuia/minimalist-java)
+![GitHub/v/tag/giovannymassuia/minimalist-java](https://img.shields.io/github/v/tag/giovannymassuia/minimalist-java?label=version)
+![GitHub issues](https://img.shields.io/github/issues/giovannymassuia/minimalist-java)
 
-Get started by **creating a new site**.
+## Modules
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+1. **Minimalist Http API (`http-api`)**: Provides essential API functionalities for Java
+   applications.
+2. **Minimalist Dependency Injection (`di`)**: A lightweight solution for dependency injection
+   in Java.
 
-### What you'll need
+## Contributing
 
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+If you'd like to contribute to Minimalist Java, please read
+our [contributing guidelines](CONTRIBUTING.md).
 
-## Generate a new site
+## License
 
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+`minimalist-java` is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for
+details.

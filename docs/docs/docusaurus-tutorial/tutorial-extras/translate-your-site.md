@@ -39,7 +39,8 @@ Start your site on the French locale:
 npm run start -- --locale fr
 ```
 
-Your localized site is accessible at [http://localhost:3000/fr/](http://localhost:3000/fr/) and the `Getting Started` page is translated.
+Your localized site is accessible at [http://localhost:3000/fr/](http://localhost:3000/fr/) and
+the `Getting Started` page is translated.
 
 :::caution
 
@@ -71,7 +72,7 @@ export default {
 
 The locale dropdown now appears in your navbar:
 
-![Locale Dropdown](./img/localeDropdown.png)
+![Locale Dropdown](img/localeDropdown.png)
 
 ## Build your localized site
 
