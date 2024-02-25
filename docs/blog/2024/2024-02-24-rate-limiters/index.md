@@ -4,6 +4,7 @@ title: Rate Limiters
 authors: giovannymassuia
 tags: [ rate-limiters, distributed-systems, scalability ]
 date: 2024-02-24T15:00
+image: hero.png
 ---
 
 ![Rate Limiters](hero.png)
