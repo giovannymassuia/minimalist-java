@@ -5,11 +5,9 @@ sidebar_position: 1
 # Intro
 
 Minimalist Java is a collection of lightweight Java libraries aiming to simplify and streamline
-your
-Java development.
+your Java development.
 This project is structured as a monorepo, containing multiple individual libraries that can be used
-independently or
-together for a cohesive development experience.
+independently or together for a cohesive development experience.
 
 [![Release](https://github.com/giovannymassuia/minimalist-java/actions/workflows/publish.yaml/badge.svg)](https://github.com/giovannymassuia/minimalist-java/actions/workflows/publish.yaml)
 ![GitHub](https://img.shields.io/github/license/giovannymassuia/minimalist-java)
