@@ -33,7 +33,7 @@ export default function Home(): JSX.Element {
   return (
       <Layout
           title={`${siteConfig.title}`}
-          description="Description will go into a meta tag in <head />">
+          description="minimalist and modular Java framework">
         <HomepageHeader/>
         <main>
           <HomepageFeatures/>
