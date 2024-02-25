@@ -8,6 +8,8 @@ const config: Config = {
   tagline: 'A minimalist Java framework',
   favicon: 'img/favicon.ico',
 
+  plugins: [require.resolve("@cmfcmf/docusaurus-search-local")],
+
   // Set the production url of your site here
   url: 'https://docs.minimalist-java.giovannymassuia.io',
   // Set the /<baseUrl>/ pathname under which your site is served
