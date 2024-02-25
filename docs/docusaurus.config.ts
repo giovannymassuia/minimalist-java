@@ -8,7 +8,10 @@ const config: Config = {
   tagline: 'A minimalist Java framework',
   favicon: 'img/favicon.ico',
 
-  plugins: [require.resolve("@easyops-cn/docusaurus-search-local")],
+  plugins: [
+    require.resolve("@easyops-cn/docusaurus-search-local"),
+    'docusaurus-plugin-image-zoom'
+  ],
 
   // Set the production url of your site here
   url: 'https://docs.minimalist-java.giovannymassuia.io',
@@ -96,15 +99,15 @@ const config: Config = {
           type: 'docsVersionDropdown',
           position: 'right',
           dropdownItemsAfter: [
-            {type: 'html', value: '<hr class="dropdown-separator">'},
-            {to: '/versions', label: 'All versions'}
+            // {type: 'html', value: '<hr class="dropdown-separator">'},
+            // {to: '/versions', label: 'All versions'}
           ],
           dropdownActiveClassDisabled: true,
         },
         {
           href: 'https://github.com/giovannymassuia/minimalist-java',
-          label: 'GitHub',
           position: 'right',
+          className: 'header-github-link',
         },
       ],
     },
@@ -158,6 +161,9 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
       additionalLanguages: ["java", "scala"],
     },
+    zoom: {
+      // selector: 'img',
+    }
   } satisfies Preset.ThemeConfig,
 };
 

@@ -14,6 +14,14 @@ independently or together for a cohesive development experience.
 ![GitHub/v/tag/giovannymassuia/minimalist-java](https://img.shields.io/github/v/tag/giovannymassuia/minimalist-java?label=version)
 ![GitHub issues](https://img.shields.io/github/issues/giovannymassuia/minimalist-java)
 
+:::warning[Attention]
+
+## 👷🏗️ Under development
+
+This project is under development and is not ready for use. Feel free to explore the documentation
+and the source code, but be aware that the APIs and features are subject to change.
+:::
+
 ## Modules
 
 1. **Minimalist Http API (`http-api`)**: Provides essential API functionalities for Java

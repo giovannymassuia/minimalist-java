@@ -1,4 +1,4 @@
-# Installation
+# GitHub Packages
 
 To use `minimalist-java` in your Maven project, follow the steps below:
 

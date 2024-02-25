@@ -6,10 +6,14 @@ tags: [ rate-limiters, distributed-systems, scalability ]
 date: 2024-02-24T15:00
 ---
 
+![Rate Limiters](hero.png)
+
 In this blog post, we'll discuss rate limiters, a critical component in distributed systems to
 prevent abuse and ensure fair usage of resources. We'll cover the different types of rate
 limiters and their use cases, and we'll provide examples of how to use them with the minimalist-java
 http-api module.
+
+<!-- truncate -->
 
 ## Token Bucket
 
