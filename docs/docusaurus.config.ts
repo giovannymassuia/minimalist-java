@@ -63,6 +63,15 @@ const config: Config = {
           showReadingTime: true,
           readingTime: ({content, defaultReadingTime}) =>
               defaultReadingTime({content, options: {wordsPerMinute: 100}}),
+          postsPerPage: 5,
+          feedOptions: {
+            type: 'all',
+            copyright: `Copyright © ${new Date().getFullYear()} minimalist-java.`,
+          },
+          blogTitle: 'minimalist-java blog',
+          blogDescription: 'Read blog posts about minimalist-java from the team',
+          blogSidebarCount: 'ALL',
+          // blogSidebarTitle: 'All our posts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl:
