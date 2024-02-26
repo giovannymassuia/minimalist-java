@@ -16,15 +16,27 @@ how to use them with the minimalist-java [http-api](../../../docs/modules/http-a
 
 <!-- truncate -->
 
+---
+
 ## Token Bucket
 
 ![Token Bucket](token-bucket.png)
 
-Parameters: `bucketSize`, `refillRate`.
+The token bucket algorithm is a simple and efficient way to control the rate of requests to a
+resource. It is widely used in network traffic shaping, API rate limiting, and other scenarios where
+a controlled flow of requests is required.
 
-- Global bucket limits requests across all users.
-- Tokens are consumed per request; when out of tokens, requests are dropped until the next
-  refill.
+The token bucket algorithm is based on the concept of a bucket that holds a fixed number of tokens.
+
+- When a request arrives, the algorithm checks if there are enough tokens in the bucket to serve the
+  request.
+- If there are enough tokens, the request is served, and the number of tokens in the bucket is
+  decremented.
+- If there are not enough tokens, the request is rejected.
+- Periodically, the bucket is refilled with a fixed number of tokens.
+- The bucket has a maximum capacity, and the number of tokens is never greater than the capacity.
+- The rate at which the bucket is refilled determines the maximum rate at which requests can be
+  served.
 
 Example: `bucketSize = 5`, `refillRate = 1 token/sec`.
 
@@ -36,6 +48,11 @@ Example: `bucketSize = 5`, `refillRate = 1 token/sec`.
 - `T5 (01:00:02.100)`: 1 request arrives, consumes 1 token, 3 tokens left.
 - `T6 (01:00:03.000)`: No more requests so far. Bucket is refilled back to 4 tokens (adds 3
   missing ones).
+
+See more details information about the Token Bucket implementation in our
+docs [here](../../../docs/modules/http-api/rate-limit/token-bucket).
+
+---
 
 ## Leaking Bucket
 

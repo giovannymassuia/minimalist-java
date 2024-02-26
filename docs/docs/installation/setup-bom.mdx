@@ -1,0 +1,46 @@
+import CodeBlock from "@theme/CodeBlock";
+import current_version from "@site/current_version.json";
+
+# Using Maven BOM
+
+If you're planning to use multiple modules from `minimalist-java`, consider adding the BOM (Bill of
+Materials) to your
+project. It will help manage versions for you.
+
+Add the BOM to your `dependencyManagement` section using the desired version:
+
+<CodeBlock title="pom.xml" language="xml">
+  {`<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>io.giovannymassuia.minimalist.java</groupId>
+      <artifactId>bom</artifactId>
+      <version>${current_version.version}</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
+`}
+</CodeBlock>
+
+Now, when adding individual `minimalist-java` modules to your dependencies, you don't need to
+specify their versions:
+
+In this example we are adding the `http-api` and `di` modules to our project and both will use the
+version defined in the BOM <code>{ current_version.version }</code>.
+
+```xml title="pom.xml"
+
+<dependencies>
+    <dependency>
+        <groupId>io.giovannymassuia.minimalist.java</groupId>
+        <artifactId>http-api</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.giovannymassuia.minimalist.java</groupId>
+        <artifactId>di</artifactId>
+    </dependency>
+</dependencies>
+
+```

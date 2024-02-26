@@ -10,7 +10,7 @@ supports authentication via the personal access token at this time.
 
 Add the following to your `~/.m2/settings.xml`:
 
-```xml
+```xml title="~/.m2/settings.xml"
 
 <servers>
     <server>
@@ -19,6 +19,7 @@ Add the following to your `~/.m2/settings.xml`:
         <password>YOUR_PERSONAL_ACCESS_TOKEN</password>
     </server>
 </servers>
+
 ```
 
 Replace `YOUR_GITHUB_USERNAME` with your GitHub username and `YOUR_PERSONAL_ACCESS_TOKEN` with a
@@ -31,7 +32,7 @@ packages).
 
 In your project's `pom.xml`, add the following repository:
 
-```xml
+```xml title="pom.xml"
 
 <repositories>
     <repository>
@@ -39,6 +40,7 @@ In your project's `pom.xml`, add the following repository:
         <url>https://maven.pkg.github.com/giovannymassuia/minimalist-java</url>
     </repository>
 </repositories>
+
 ```
 
 Replace `OWNER` with the repository owner's username and `REPO` with the name of the repository.
@@ -47,53 +49,15 @@ Replace `OWNER` with the repository owner's username and `REPO` with the name of
 
 Next, you can add the dependency to your project:
 
-```xml
+```xml title="pom.xml"
 
 <dependency>
     <groupId>io.giovannymassuia.minimalist.java</groupId>
-    <artifactId>http-api</artifactId>
+    <artifactId>MODULE</artifactId>
     <version>LATEST_VERSION</version>
 </dependency>
+
 ```
 
+REPLACE `MODULE` with the desired [module](../modules) name.
 Replace `LATEST_VERSION` with the desired version of the library.
-
-### 4. (Optional) Using the BOM
-
-If you're planning to use multiple modules from `minimalist-java`, consider adding the BOM (Bill of
-Materials) to your
-project. It will help manage versions for you.
-
-Add the BOM to your `dependencyManagement` section:
-
-```xml
-
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>io.giovannymassuia.minimalist.java</groupId>
-            <artifactId>bom</artifactId>
-            <version>LATEST_VERSION</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-```
-
-Now, when adding individual `minimalist-java` modules to your dependencies, you don't need to
-specify their versions:
-
-```xml
-
-<dependencies>
-    <dependency>
-        <groupId>io.giovannymassuia.minimalist.java</groupId>
-        <artifactId>http-api</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>io.giovannymassuia.minimalist.java</groupId>
-        <artifactId>di</artifactId>
-    </dependency>
-</dependencies>
-```

@@ -6,6 +6,7 @@ sidebar_position: 1
 
 Minimalist Java is a collection of lightweight Java libraries aiming to simplify and streamline
 your Java development.
+
 This project is structured as a monorepo, containing multiple individual libraries that can be used
 independently or together for a cohesive development experience.
 
@@ -24,10 +25,10 @@ and the source code, but be aware that the APIs and features are subject to chan
 
 ## Modules
 
-1. **Minimalist Http API (`http-api`)**: Provides essential API functionalities for Java
-   applications.
-2. **Minimalist Dependency Injection (`di`)**: A lightweight solution for dependency injection
-   in Java.
+1. **Minimalist Http API ([`http-api`](modules/http-api))**: Provides essential API functionalities
+   for Java applications.
+2. **Minimalist Dependency Injection ([`di`](modules/di))**: A lightweight solution for dependency
+   injection in Java.
 
 ## Contributing
 

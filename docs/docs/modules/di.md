@@ -1,3 +1,3 @@
 # di
 
-123
+A lightweight solution for dependency injection in Java.
