@@ -36,9 +36,9 @@ class TokenBucketTest {
         RateLimiter rl = RateLimitFactory.customTokenBucket(bucketSize, refillRate);
 
         /*
-         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens -
-         * Make more requests, bucket will be empty, should not go through - wait bucket to refill,
-         * and make more request
+         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens - Make
+         * more requests, bucket will be empty, should not go through - wait bucket to refill, and make more
+         * request
          */
 
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t1

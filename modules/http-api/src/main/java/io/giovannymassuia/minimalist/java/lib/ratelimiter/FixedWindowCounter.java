@@ -60,7 +60,7 @@ class FixedWindowCounter implements RateLimiter {
         long currentWindowStart = now - (now % windowSizeMillis);
 
         if (windowStart.get() != currentWindowStart
-                        && windowStart.compareAndSet(windowStart.get(), currentWindowStart)) {
+                && windowStart.compareAndSet(windowStart.get(), currentWindowStart)) {
             requestCount.set(0); // Start of a new window, reset the counter
         }
 

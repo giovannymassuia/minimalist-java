@@ -74,14 +74,12 @@ class JavaHttpApi extends ApiServer {
             List<RoutePath> routePaths = route.pathsByMethod(Route.RouteMethod.valueOf(method));
 
             Optional<RoutePath> routePath = routePaths.stream()
-                            .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
-                                            extractedPathParams))
-                            .findFirst();
+                    .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri, extractedPathParams))
+                    .findFirst();
 
             routePath.ifPresentOrElse(path -> {
                 Runnable requestRunnable = () -> {
-                    HttpContext httpContext =
-                                    new HttpContext(extractedPathParams, extractedQueryParams);
+                    HttpContext httpContext = new HttpContext(extractedPathParams, extractedQueryParams);
                     ResponseEntity<?> response = path.handler().apply(httpContext);
                     try {
                         sendResponse(exchange, response);
@@ -163,8 +161,7 @@ class JavaHttpApi extends ApiServer {
         return false;
     }
 
-    private void sendResponse(HttpExchange exchange, String response, int statusCode)
-                    throws IOException {
+    private void sendResponse(HttpExchange exchange, String response, int statusCode) throws IOException {
         if (response == null) {
             exchange.sendResponseHeaders(statusCode, -1);
             return;
@@ -176,8 +173,7 @@ class JavaHttpApi extends ApiServer {
         }
     }
 
-    private void sendResponse(HttpExchange exchange, ResponseEntity<?> responseEntity)
-                    throws IOException {
+    private void sendResponse(HttpExchange exchange, ResponseEntity<?> responseEntity) throws IOException {
         String response = responseEntity.body() != null ? toJson(responseEntity.body()) : null;
 
         // set json content type

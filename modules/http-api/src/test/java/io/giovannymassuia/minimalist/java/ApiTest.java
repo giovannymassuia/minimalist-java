@@ -38,24 +38,24 @@ class ApiTest {
     @BeforeEach
     void setUp() {
         randomPort = (int) (Math.random() * 10000) + 10000;
-        Api.create(randomPort).addRoute(Route.builder("/api")
-                        .path(RouteMethod.GET, "/",
-                                        ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
-                        .path(RouteMethod.GET, "/{name}",
-                                        ctx -> ResponseEntity.ok(Map.of("message",
-                                                        "Hello " + ctx.pathParams().get("name")))))
-                        .start();
+        Api.create(randomPort)
+                .addRoute(Route.builder("/api")
+                        .path(RouteMethod.GET, "/", ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
+                        .path(RouteMethod.GET,
+                                "/{name}",
+                                ctx -> ResponseEntity.ok(Map.of("message", "Hello " + ctx.pathParams().get("name")))))
+                .start();
     }
 
     @Test
     void testJavaHttpApi() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                        .uri(java.net.URI.create("http://localhost:" + randomPort + "/api")).GET()
-                        .build();
+                .uri(java.net.URI.create("http://localhost:" + randomPort + "/api"))
+                .GET()
+                .build();
 
         try (var client = HttpClient.newHttpClient()) {
-            HttpResponse<String> response =
-                            client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             assertEquals(200, response.statusCode());
             assertEquals("{\"message\":\"Hello World!\"}", response.body());
@@ -65,13 +65,12 @@ class ApiTest {
     @Test
     void testJavaHttpApiPathParam() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                        .uri(java.net.URI
-                                        .create("http://localhost:" + randomPort + "/api/john-doe"))
-                        .GET().build();
+                .uri(java.net.URI.create("http://localhost:" + randomPort + "/api/john-doe"))
+                .GET()
+                .build();
 
         try (var client = HttpClient.newHttpClient()) {
-            HttpResponse<String> response =
-                            client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             assertEquals(200, response.statusCode());
             assertEquals("{\"message\":\"Hello john-doe\"}", response.body());

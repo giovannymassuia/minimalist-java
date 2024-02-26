@@ -36,10 +36,8 @@ public enum RouteMethod {
         return new Route(rootPath, new HashMap<>());
     }
 
-    public Route path(RouteMethod method, String pathPattern,
-                    Function<HttpContext, ResponseEntity<?>> handler) {
-        paths.computeIfAbsent(method, k -> new ArrayList<>())
-                        .add(new RoutePath(method.name(), pathPattern, handler));
+    public Route path(RouteMethod method, String pathPattern, Function<HttpContext, ResponseEntity<?>> handler) {
+        paths.computeIfAbsent(method, k -> new ArrayList<>()).add(new RoutePath(method.name(), pathPattern, handler));
         return this;
     }
 

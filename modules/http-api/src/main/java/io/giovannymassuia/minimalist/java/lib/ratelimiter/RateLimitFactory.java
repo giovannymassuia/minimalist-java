@@ -59,8 +59,7 @@ public class RateLimitFactory {
         return new SlidingWindowCounterSlots();
     }
 
-    public static RateLimiter customSlidingWindowCounterSlots(int maxRequests,
-                    Duration windowSize) {
+    public static RateLimiter customSlidingWindowCounterSlots(int maxRequests, Duration windowSize) {
         return new SlidingWindowCounterSlots(maxRequests, windowSize);
     }
 
@@ -68,8 +67,7 @@ public class RateLimitFactory {
         return new SlidingWindowCounterApproximate();
     }
 
-    public static RateLimiter customSlidingWindowCounterApproximate(int maxRequests,
-                    Duration windowSize) {
+    public static RateLimiter customSlidingWindowCounterApproximate(int maxRequests, Duration windowSize) {
         return new SlidingWindowCounterApproximate(maxRequests, windowSize);
     }
 }

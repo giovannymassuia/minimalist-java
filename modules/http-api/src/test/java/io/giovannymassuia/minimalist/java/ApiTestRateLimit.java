@@ -39,22 +39,22 @@ class ApiTestRateLimit {
     @BeforeEach
     void setUp() {
         randomPort = (int) (Math.random() * 10000) + 10000;
-        Api.create(randomPort).rateLimit(RateLimitFactory.blockAllRequests())
-                        .addRoute(Route.builder("/api").path(RouteMethod.GET, "/",
-                                        ctx -> ResponseEntity
-                                                        .ok(Map.of("message", "Hello World!"))))
-                        .start();
+        Api.create(randomPort)
+                .rateLimit(RateLimitFactory.blockAllRequests())
+                .addRoute(Route.builder("/api")
+                        .path(RouteMethod.GET, "/", ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
+                .start();
     }
 
     @Test
     void testJavaHttpApi() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                        .uri(java.net.URI.create("http://localhost:" + randomPort + "/api")).GET()
-                        .build();
+                .uri(java.net.URI.create("http://localhost:" + randomPort + "/api"))
+                .GET()
+                .build();
 
         try (var client = HttpClient.newHttpClient()) {
-            HttpResponse<String> response =
-                            client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             assertEquals(429, response.statusCode());
             assertEquals("Too many requests.", response.body());

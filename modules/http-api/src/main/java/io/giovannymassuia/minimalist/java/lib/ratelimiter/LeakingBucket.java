@@ -64,8 +64,7 @@ class LeakingBucket implements RateLimiter {
 
     @Override
     public boolean checkAndProcess(RoutePath routePath, Runnable runnable) {
-        if (currentQueueSize.get() <= bucketSize
-                        && currentQueueSize.incrementAndGet() <= bucketSize) {
+        if (currentQueueSize.get() <= bucketSize && currentQueueSize.incrementAndGet() <= bucketSize) {
             return bucketQueue.offer(runnable);
         } else {
             currentQueueSize.decrementAndGet(); // Revert increment if queue is full
