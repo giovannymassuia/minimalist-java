@@ -11,28 +11,31 @@ image: ./social-card.png
 
 In this blog post, we'll discuss rate limiters, a critical component in distributed systems to
 prevent abuse and ensure fair usage of resources. We'll cover the different types of rate
-limiters and their use cases, and we'll provide examples of how to use them with the minimalist-java
-http-api module.
+limiters and their implementations in the `minimalist-java` framework, and we'll provide examples of
+how to use them with the minimalist-java [http-api](../../../docs/modules/http-api) module.
 
 <!-- truncate -->
 
 ## Token Bucket
 
-- Parameters: `bucketSize`, `refillRate`.
+![Token Bucket](token-bucket.png)
+
+Parameters: `bucketSize`, `refillRate`.
+
 - Global bucket limits requests across all users.
 - Tokens are consumed per request; when out of tokens, requests are dropped until the next
   refill.
-- Example:
-    - bucketSize = 5, refillRate = 1 token/sec.
-      ```
-      T0 (01:00:00.000): Bucket starts full with 5 tokens.
-      T1 (01:00:01.100): 1 request arrives, consumes 1 token, 4 tokens left.
-      T2 (01:00:01.200): 4 more requests arrive, consume 4 tokens, bucket empty.
-      T3 (01:00:01.300): No tokens, requests dropped. Bucket refills 1 token per second.
-      T4 (01:00:02.000): Bucket is refilled with all 5 tokens.
-      T5 (01:00:02.100): 1 request arrives, consumes 1 token, 4 tokens left.
-      T6 (01:00:03.000): No more requests so far. Bucket is refilled back to 5 tokens (adds 4 missing ones).
-      ```
+
+Example: `bucketSize = 5`, `refillRate = 1 token/sec`.
+
+- `T0 (01:00:00.000)`: Bucket starts full with 4 tokens.
+- `T1 (01:00:01.100)`: 1 request arrives, consumes 1 token, 3 tokens left.
+- `T2 (01:00:01.200)`: 3 more requests arrive, consume 3 tokens, bucket empty.
+- `T3 (01:00:01.300)`: No tokens, requests dropped. Bucket refills 4 token per second.
+- `T4 (01:00:02.000)`: Bucket is refilled with all 5 tokens.
+- `T5 (01:00:02.100)`: 1 request arrives, consumes 1 token, 3 tokens left.
+- `T6 (01:00:03.000)`: No more requests so far. Bucket is refilled back to 4 tokens (adds 3
+  missing ones).
 
 ## Leaking Bucket
 
