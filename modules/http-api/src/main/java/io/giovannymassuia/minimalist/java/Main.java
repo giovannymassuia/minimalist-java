@@ -15,6 +15,7 @@
  */
 package io.giovannymassuia.minimalist.java;
 
+import java.time.Duration;
 import java.util.Map;
 
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
@@ -27,7 +28,8 @@ public class Main {
 
     public static void main(String[] args) {
         Api.create(8080)
-                .rateLimit(RateLimitFactory.defaultTokenBucket())
+                // .rateLimit(RateLimitFactory.customTokenBucketWithScheduler(5, Duration.ofSeconds(3)))
+                .rateLimit(RateLimitFactory.customTokenBucket(5, Duration.ofSeconds(3)))
                 .addRoute(Route.builder("/")
                         .path(RouteMethod.GET, "/", ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
                 .start();

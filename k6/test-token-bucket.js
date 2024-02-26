@@ -6,7 +6,7 @@ let metrics200 = new Counter('metrics_200');
 let metrics429 = new Counter('metrics_429');
 
 export const options = {
-  vus: 5, // users at the same time
+  vus: 7, // users at the same time
   duration: '10s',
 };
 

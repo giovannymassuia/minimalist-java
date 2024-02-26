@@ -16,11 +16,17 @@
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
 import java.time.Duration;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
 
+/**
+ * Token Bucket algorithm implementation.
+ */
 class TokenBucket implements RateLimiter {
 
     private static final int DEFAULT_BUCKET_SIZE = 5;
@@ -32,11 +38,17 @@ class TokenBucket implements RateLimiter {
     private final AtomicInteger bucket;
     private final AtomicLong lastRefillTimestamp;
 
+    private final ScheduledExecutorService scheduler;
+
     TokenBucket() {
-        this(DEFAULT_BUCKET_SIZE, DEFAULT_REFILL_RATE);
+        this(DEFAULT_BUCKET_SIZE, DEFAULT_REFILL_RATE, false);
     }
 
     TokenBucket(int bucketSize, Duration refillRate) {
+        this(bucketSize, refillRate, false);
+    }
+
+    TokenBucket(int bucketSize, Duration refillRate, boolean useScheduler) {
         if (bucketSize <= 0) {
             throw new IllegalArgumentException("Bucket size can not be less or equal to zero.");
         }
@@ -48,11 +60,24 @@ class TokenBucket implements RateLimiter {
 
         this.bucket = new AtomicInteger(bucketSize);
         this.lastRefillTimestamp = new AtomicLong(System.currentTimeMillis());
+
+        if (useScheduler) {
+            this.scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.scheduleAtFixedRate(this::refill,
+                    refillRateMilliseconds,
+                    refillRateMilliseconds,
+                    TimeUnit.MILLISECONDS);
+        } else {
+            this.scheduler = null;
+        }
     }
 
     @Override
     public boolean checkAndProcess(RoutePath routePath, Runnable requestRunnable) {
-        refill();
+        if (scheduler == null) {
+            refill();
+        }
+
         return processRequest(bucket.get() > 0 && bucket.decrementAndGet() >= 0, requestRunnable);
     }
 
@@ -61,7 +86,7 @@ class TokenBucket implements RateLimiter {
 
     }
 
-    private void refill() {
+    private synchronized void refill() {
         long now = System.currentTimeMillis();
         long lastRefill = lastRefillTimestamp.get();
         long elapsedTime = now - lastRefill;
