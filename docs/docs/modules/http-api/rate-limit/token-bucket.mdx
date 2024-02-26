@@ -2,6 +2,9 @@
 sidebar_position: 1
 ---
 
+
+import RateLimitHowToUse from "@site/src/components/rate-limit/RateLimitHowToUse";
+
 # Token Bucket
 
 ### Parameters
@@ -33,21 +36,4 @@ missing ones).
 
 ### How to use
 
-When creating your API, you can use the [RateLimitFactory](#factory) to create a token bucket rate limit.
-
-```java showLineNumbers {3}
-
-Api.create(8080)
-    .rateLimit(RateLimitFactory.customTokenBucket(4, Duration.ofSeconds(1)))
-    .addRoute(Route.builder("/"),
-        .path(RouteMethod.GET, "/", controller::handler))
-    .start();
-
-```
-
-### Factory
-
-The [RateLimitFactory](https://github.com/giovannymassuia/minimalist-java/blob/main/modules/http-api/src/main/java/io/giovannymassuia/minimalist/java/lib/ratelimiter/RateLimitFactory.java#L34-L40)
-provides a `default` and a `custom` token bucket rate limit.
-
-- For more details on the check the source code of the [RateLimitFactory](https://github.com/giovannymassuia/minimalist-java/blob/main/modules/http-api/src/main/java/io/giovannymassuia/minimalist/java/lib/ratelimiter/RateLimitFactory.java#L34-L40)
+<RateLimitHowToUse method="customTokenBucket(4, Duration.ofSeconds(1))"/>

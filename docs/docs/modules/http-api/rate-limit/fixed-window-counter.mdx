@@ -1,0 +1,34 @@
+---
+sidebar_position: 3
+---
+
+
+
+
+
+import RateLimitHowToUse from "@site/src/components/rate-limit/RateLimitHowToUse";
+
+# Fixed Window Counter
+
+### Parameters
+
+- `maxRequests`, `windowSize`.
+
+### Description
+
+- Counts requests in fixed time windows; excess requests are dropped once the limit is reached.
+- Susceptible to bursts at window boundaries, potentially allowing double the limit across two
+windows.
+
+:::note
+A major drawback of the fixed window counter algorithm is that it is susceptible to bursts of
+traffic at the edges of time windows, which can cause more requests than the allowed quota to go
+through. The excess can go as high as double the limit across two windows.
+:::
+
+
+Example:
+
+### How to use
+
+<RateLimitHowToUse method="customFixedWindowCounter(4, Duration.ofSeconds(1))"/>
