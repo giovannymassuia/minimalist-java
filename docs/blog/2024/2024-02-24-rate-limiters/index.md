@@ -87,42 +87,61 @@ Example: `bucketSize = 4`, `leakRate = 1 request/2 sec`.
 
 ## Fixed Window Counter
 
-- Parameters: `windowSize`, `maxRequests`.
-- Counts requests in fixed time windows; excess requests are dropped once the limit is reached.
-- Susceptible to bursts at window boundaries, potentially allowing double the limit across two
-  windows.
-- Example:
-    - windowSize = 1 sec, requestLimit = 3.
-      ```
-        | 5         X           X       ■ => request allowed
-        | 4         X   X       X       X => request dropped
-        | 3     ■   ■   ■       ■
-        | 2     ■   ■   ■   ■   ■
-        | 1     ■   ■   ■   ■   ■
-        |_____________________________
-        (sec)   1s  2s  3s  4s  5s
-      ```
+The fixed window counter algorithm is a simple and efficient way to control the rate of requests to
+a
+resource. It is widely used in network traffic shaping, API rate limiting, and other scenarios where
+a controlled flow of requests is required.
 
-    - A problem with this algorithm is that a burst of traffic at the edges of time
-      windows could cause more requests than allowed quota to go through. Consider the following
-      case:
-      ```
-      Requests (excess at the edges of window):
-        5         |               |          ■ => request allowed
-        4         |           ■   |          X => request dropped
-        3         | ■         ■   |           
-        2         | ■ ■       ■ X |           
-        1         | ■ ■     ■ ■ X |           
-        |_________|_______|_______|___________
-        00:00   00:30   01:00   01:30   02:00   (min:sec)
-                              <---- Window --->
-      ```
-      In Figure above, the system allows a maximum of 5 requests per minute, and the available
-      quota
-      resets at the human-friendly round minute. As seen, there are five requests between 00:00
-      and 01:00 and five more requests between 01:00 and 02:00. For the one-minute window
-      between 00:30 and 01:30, 10 requests go through. That is twice as many as allowed
-      requests.
+The fixed window counter algorithm is based on the concept of a fixed time window. The algorithm
+counts the number of requests that arrive within the time window and compares the count to a
+threshold. If the count exceeds the threshold, the request is rejected.
+
+:::note
+A major drawback of the fixed window counter algorithm is that it is susceptible to bursts of
+traffic at the edges of time windows, which can cause more requests than the allowed quota to go
+through. The excess can go as high as double the limit across two windows.
+:::
+
+- The algorithm counts requests in fixed time windows.
+- Excess requests are dropped once the limit is reached.
+- The algorithm is susceptible to bursts at window boundaries, potentially allowing double the limit
+  across two windows.
+- The window size and the maximum number of requests are configurable.
+- The algorithm is simple and efficient but has limitations in handling bursts of traffic.
+- The algorithm is suitable for scenarios where a simple and efficient rate limiting mechanism is
+  required and the limitations of the algorithm are acceptable.
+
+Example: `windowSize = 1 sec`, `requestLimit = 3`.
+
+```
+    | 5         X           X       ■ => request allowed
+    | 4         X   X       X       X => request dropped
+    | 3     ■   ■   ■       ■  
+    | 2     ■   ■   ■   ■   ■
+    | 1     ■   ■   ■   ■   ■
+    |_____________________________
+    (sec)   1s  2s  3s  4s  5s
+```
+
+> A problem with this algorithm is that a burst of traffic at the edges of time windows could cause
+> more requests than allowed quota to go through. Consider the following case:
+
+```
+    Requests (excess at the edges of window):
+    5         |               |         
+    4         |           ■   |         ■ => request allowed
+    3         | ■         ■   |         X => request dropped  
+    2         | ■ ■       ■ X |           
+    1         | ■ ■     ■ ■ X |           
+    |_________|_______|_______|___________
+    00:00   00:30   01:00   01:30   02:00   (min:sec)
+              <---- Window --->
+```
+
+In Figure above, the system allows a maximum of 5 requests per minute, and the available quota
+resets at the human-friendly round minute. As seen, there are five requests between 00:00 and 01:00
+and five more requests between 01:00 and 02:00. For the one-minute window between 00:30 and 01:30,
+10 requests go through. That is twice as many as allowed requests.
 
 ## Sliding Window Log
 
