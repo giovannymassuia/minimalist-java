@@ -56,17 +56,34 @@ docs [here](../../../docs/modules/http-api/rate-limit/token-bucket).
 
 ## Leaking Bucket
 
-- Parameters: `bucketSize`, `leakRate`.
-- Requests are queued and processed at a fixed rate, smoothing out traffic spikes.
-- Excess requests are dropped if the queue is full.
-- Example:
-    - bucketSize = 4, leakRate = 1 request/2 sec.
-      ```
-      T0 (01:00:00): Bucket empty, 1 request arrives and enters the queue.
-      T1 (01:00:02): 1st request processed (leaked out), 3 more arrive and queue up.
-      T2 (01:00:03): Requests arrinving at this time are all dropped, because queue if full.
-      T3 (01:00:04): 2nd request processed, 2 in queue, new requests continue to queue if space.
-      ```
+The leaking bucket algorithm is a rate limiting algorithm that is similar to the token bucket
+algorithm. It is used to control the rate of requests to a resource and is widely used in network
+traffic shaping, API rate limiting, and other scenarios where a controlled flow of requests is
+required.
+
+The leaking bucket algorithm is based on the concept of a bucket that holds a fixed amount of water.
+The bucket has a maximum capacity, and the amount of water in the bucket is never greater than the
+capacity.
+
+- The bucket has a leak rate, which determines the rate at which water leaks out of the bucket.
+- When a request arrives, the algorithm checks if there is enough water in the bucket to serve the
+  request.
+- If there is enough water, the request is served, and the amount of water in the bucket is
+  decremented.
+- If there is not enough water, the request is rejected.
+- Periodically, the bucket leaks water at a fixed rate.
+- The rate at which the bucket leaks water determines the maximum rate at which requests can be
+  served.
+- The bucket has a maximum capacity, and the amount of water is never greater than the capacity.
+
+![Leaking Bucket](leaking-bucket.png)
+
+Example: `bucketSize = 4`, `leakRate = 1 request/2 sec`.
+
+- `T0 (01:00:00)`: Bucket empty, 1 request arrives and enters the queue.
+- `T1 (01:00:02)`: 1st request processed (leaked out), 3 more arrive and queue up.
+- `T2 (01:00:03)`: Requests arrinving at this time are all dropped, because queue if full.
+- `T3 (01:00:04)`: 2nd request processed, 2 in queue, new requests continue to queue if space.
 
 ## Fixed Window Counter
 
@@ -203,7 +220,9 @@ public class Main {
         Api.create(8080).rateLimit(
                 RateLimitFactory.customFixedWindowCounter(3, Duration.ofSeconds(1)))
             .addRoute(Route.builder("/").path(RouteMethod.GET, "/", ctx ->
-                ResponseEntity.ok(Map.of("message", "Hello World!"))
+                                                                        ResponseEntity.ok(
+                                                                            Map.of("message",
+                                                                                "Hello World!"))
             )).start();
     }
 
