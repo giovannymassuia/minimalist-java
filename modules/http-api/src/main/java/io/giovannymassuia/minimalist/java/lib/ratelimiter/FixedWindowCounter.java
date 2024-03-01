@@ -67,8 +67,8 @@ class FixedWindowCounter implements RateLimiter {
         if (requestCount.incrementAndGet() <= maxRequests) {
             return processRequest(true, requestRunnable); // Process the request
         } else {
-            requestCount.decrementAndGet(); // Revert the count increment since the request is not
-            // processed
+            // Revert the count increment since the request is not processed
+            requestCount.decrementAndGet();
             return false; // Request rejected
         }
     }

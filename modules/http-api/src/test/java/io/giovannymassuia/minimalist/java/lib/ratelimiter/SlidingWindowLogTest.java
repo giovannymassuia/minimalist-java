@@ -51,6 +51,28 @@ class SlidingWindowLogTest {
         assertEquals(2, ((SlidingWindowLog) rl).getWindowSize());
     }
 
+    @Test
+    void checkWithScheduler() throws InterruptedException {
+        RateLimiter rl = RateLimitFactory.customSlidingWindowLogWithScheduler(3, Duration.ofSeconds(3));
+
+        assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t1
+        assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t2
+        assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t3
+        assertFalse(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t4
+
+        Thread.sleep(1500);
+
+        assertFalse(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t6
+        assertFalse(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t7
+
+        Thread.sleep(3500);
+
+        assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t6
+        assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t7
+
+        assertEquals(2, ((SlidingWindowLog) rl).getWindowSize());
+    }
+
     private RoutePath buildRoutePath() {
         return new RoutePath(RouteMethod.GET.name(), "/", ctx -> ResponseEntity.ok(""));
     }

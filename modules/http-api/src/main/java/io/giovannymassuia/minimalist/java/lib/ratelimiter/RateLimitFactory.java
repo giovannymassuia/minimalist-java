@@ -31,24 +31,28 @@ public class RateLimitFactory {
         return new SlidingWindowLog(capacity, threshold);
     }
 
+    public static RateLimiter customSlidingWindowLogWithScheduler(int capacity, Duration threshold) {
+        return new SlidingWindowLog(capacity, threshold, true);
+    }
+
     public static RateLimiter defaultTokenBucket() {
         return new TokenBucket();
     }
 
-    public static RateLimiter customTokenBucket(int bucketSize, Duration refillRate) {
-        return new TokenBucket(bucketSize, refillRate);
+    public static RateLimiter customTokenBucket(int bucketSize, Duration refillRate, int tokensPerRefill) {
+        return new TokenBucket(bucketSize, refillRate, tokensPerRefill);
     }
 
-    public static RateLimiter customTokenBucketWithScheduler(int bucketSize, Duration refillRate) {
-        return new TokenBucket(bucketSize, refillRate, true);
+    public static RateLimiter customTokenBucketWithScheduler(int bucketSize, Duration refillRate, int tokensPerRefill) {
+        return new TokenBucket(bucketSize, refillRate, tokensPerRefill, true);
     }
 
     public static RateLimiter defaultLeakingBucket() {
         return new LeakingBucket();
     }
 
-    public static RateLimiter customLeakingBucket(int bucketSize, Duration leakRate) {
-        return new LeakingBucket(bucketSize, leakRate);
+    public static RateLimiter customLeakingBucket(int bucketSize, Duration leakRate, int requestsPerLeak) {
+        return new LeakingBucket(bucketSize, leakRate, requestsPerLeak);
     }
 
     public static RateLimiter defaultFixedWindowCounter() {

@@ -53,30 +53,31 @@ class SlidingWindowCounterApproximate implements RateLimiter {
 
     @Override
     public boolean checkAndProcess(RoutePath routePath, Runnable requestRunnable) {
+        boolean allowed = false;
         long now = System.currentTimeMillis();
         long currentWindowStart = now - (now % windowSizeMillis);
 
         // Check if we've moved to a new window
-        if (windowStart.get() != currentWindowStart) {
-            synchronized (this) {
+        synchronized (this) {
+            if (windowStart.get() != currentWindowStart) {
                 if (windowStart.compareAndSet(windowStart.get(), currentWindowStart)) {
                     // Update the counts for the new window
                     previousWindowCount.set(currentWindowCount.get());
                     currentWindowCount.set(0);
                 }
             }
+
+            // Calculate the total count with weighting
+            double positionInWindow = (double) (now - windowStart.get()) / windowSizeMillis;
+            double weightedPreviousCount = previousWindowCount.get() * (1 - positionInWindow);
+            double totalCount = currentWindowCount.get() + weightedPreviousCount;
+
+            if (totalCount < maxRequests) { // Check against the maxRequests threshold
+                currentWindowCount.incrementAndGet();
+                allowed = true;
+            }
         }
 
-        // Calculate the total count with weighting
-        double positionInWindow = (double) (now - windowStart.get()) / windowSizeMillis;
-        double weightedPreviousCount = previousWindowCount.get() * (1 - positionInWindow);
-        double totalCount = currentWindowCount.get() + weightedPreviousCount;
-
-        boolean allowed = false;
-        if (totalCount < maxRequests) { // Check against the maxRequests threshold
-            currentWindowCount.incrementAndGet();
-            allowed = true;
-        }
         return processRequest(allowed, requestRunnable);
     }
 

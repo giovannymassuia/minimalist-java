@@ -16,8 +16,10 @@
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
 import java.time.Duration;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
@@ -31,7 +33,7 @@ class SlidingWindowCounterSlots implements RateLimiter {
     private final int maxRequestsPerWindow;
     private final long windowSizeMillis;
 
-    private final Queue<Integer> slots;
+    private final Deque<AtomicInteger> slots;
     private final Object lock = new Object();
 
     private final AtomicLong lastCleanup;
@@ -54,7 +56,7 @@ class SlidingWindowCounterSlots implements RateLimiter {
 
         this.slots = new LinkedList<>();
         for (int i = 0; i < SLOTS; i++) {
-            slots.add(0); // Initialize slots with zero count
+            slots.add(new AtomicInteger(0)); // Initialize slots with zero count
         }
     }
 
@@ -65,7 +67,7 @@ class SlidingWindowCounterSlots implements RateLimiter {
             long now = System.currentTimeMillis();
             slideWindow(now);
 
-            int totalRequests = slots.stream().mapToInt(Integer::intValue).sum();
+            int totalRequests = slots.stream().mapToInt(AtomicInteger::get).sum();
             if (totalRequests < maxRequestsPerWindow) {
                 incrementCurrentSlot();
                 allowed = true;
@@ -87,7 +89,7 @@ class SlidingWindowCounterSlots implements RateLimiter {
 
             for (int i = 0; i < slotsToSlide; i++) {
                 slots.poll(); // Remove the oldest slot
-                slots.add(0); // Add a new slot for the current period
+                slots.add(new AtomicInteger(0)); // Add a new slot for the current period
             }
 
             // Update lastCleanup to the start of the current window period
@@ -96,12 +98,18 @@ class SlidingWindowCounterSlots implements RateLimiter {
     }
 
     private void incrementCurrentSlot() {
-        int currentCount = slots.poll(); // Remove the current slot's count
-        slots.add(currentCount + 1); // Increment the count and add it back as the last slot
+        AtomicInteger currentSlot = slots.peekLast(); // Get the current slot without removing it
+        if (currentSlot != null) {
+            currentSlot.incrementAndGet(); // Increment the count atomically
+        }
     }
 
     @Override
     public void shutdownGracefully() {
         // Implement any necessary shutdown logic here
+    }
+
+    protected Queue<AtomicInteger> getSlots() {
+        return slots;
     }
 }

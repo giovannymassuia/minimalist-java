@@ -17,6 +17,8 @@ package io.giovannymassuia.minimalist.java;
 
 import java.time.Duration;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
 import io.giovannymassuia.minimalist.java.lib.Route;
@@ -27,9 +29,13 @@ import io.giovannymassuia.minimalist.java.lib.servers.Api;
 public class Main {
 
     public static void main(String[] args) {
+        Logger rootLogger = Logger.getLogger("");
+        rootLogger.setLevel(Level.FINE);
+
         Api.create(8080)
-                // .rateLimit(RateLimitFactory.customTokenBucketWithScheduler(5, Duration.ofSeconds(3)))
-                .rateLimit(RateLimitFactory.customTokenBucket(5, Duration.ofSeconds(3)))
+                // .rateLimit(RateLimitFactory.customTokenBucketWithScheduler(5, Duration.ofSeconds(2), 5))
+                // .rateLimit(RateLimitFactory.customTokenBucket(5, Duration.ofSeconds(2), 5))
+                .rateLimit(RateLimitFactory.customLeakingBucket(5, Duration.ofSeconds(1), 1))
                 .addRoute(Route.builder("/")
                         .path(RouteMethod.GET, "/", ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
                 .start();

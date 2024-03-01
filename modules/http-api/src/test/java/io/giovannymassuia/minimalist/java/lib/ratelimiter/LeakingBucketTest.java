@@ -34,7 +34,7 @@ class LeakingBucketTest {
     void check() throws InterruptedException {
         int bucketSize = 2;
         var leakRate = Duration.ofSeconds(2);
-        RateLimiter rl = RateLimitFactory.customLeakingBucket(bucketSize, leakRate);
+        RateLimiter rl = RateLimitFactory.customLeakingBucket(bucketSize, leakRate, 1);
 
         AtomicBoolean r1 = new AtomicBoolean(false);
         AtomicBoolean r2 = new AtomicBoolean(false);

@@ -44,6 +44,10 @@ class SlidingWindowLog implements RateLimiter {
     }
 
     SlidingWindowLog(int capacity, Duration threshold) {
+        this(capacity, threshold, false);
+    }
+
+    SlidingWindowLog(int capacity, Duration threshold, boolean useScheduler) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity should not be less than 0.");
         }
@@ -53,14 +57,17 @@ class SlidingWindowLog implements RateLimiter {
 
         this.capacity = capacity;
         this.thresholdMilliseconds = threshold.toMillis();
-        this.windowLog = new LinkedBlockingQueue<>(capacity);
+        this.windowLog = new LinkedBlockingQueue<>();
 
-        this.scheduler = Executors.newScheduledThreadPool(1);
-        // Cleanup at half the window size
-        long cleanupInterval = thresholdMilliseconds / 2;
-        // Schedule the cleanup task to run periodically
-        scheduler
-                .scheduleAtFixedRate(this::cleanupOldRequests, cleanupInterval, cleanupInterval, TimeUnit.MILLISECONDS);
+        if (useScheduler) {
+            this.scheduler = Executors.newScheduledThreadPool(1);
+            // Cleanup at half the window size
+            long cleanupInterval = thresholdMilliseconds / 2;
+            // Schedule the cleanup task to run periodically
+            scheduler.scheduleAtFixedRate(this::cleanupOldRequests, 0, cleanupInterval, TimeUnit.MILLISECONDS);
+        } else {
+            this.scheduler = null;
+        }
     }
 
     @Override
@@ -69,8 +76,15 @@ class SlidingWindowLog implements RateLimiter {
         boolean allowRequest = false;
 
         synchronized (this) {
-            if (windowLog.size() < capacity) {
-                windowLog.add(now);
+            cleanupOldRequests();
+
+            // in window log, if the size is less than the capacity, we allow the request
+            // and add the current timestamp to the window log
+            // if the size is equal to the capacity, we do not allow the request
+            // but we still add the current timestamp to the window log
+            windowLog.offer(now);
+
+            if (windowLog.size() <= capacity) {
                 allowRequest = true;
             } else {
                 logger.info(
@@ -90,6 +104,9 @@ class SlidingWindowLog implements RateLimiter {
 
     @Override
     public void shutdownGracefully() {
+        if (scheduler == null)
+            return;
+
         System.out.println("Shutting down " + this.getClass().getSimpleName() + "...");
 
         scheduler.shutdown();

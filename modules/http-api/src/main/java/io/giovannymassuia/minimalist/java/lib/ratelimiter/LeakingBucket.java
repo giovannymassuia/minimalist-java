@@ -32,9 +32,11 @@ class LeakingBucket implements RateLimiter {
 
     private static final int DEFAULT_BUCKET_SIZE = 5;
     private static final Duration DEFAULT_REFILL_RATE = Duration.ofSeconds(1);
+    private static final int DEFAULT_REQUEST_PER_LEAK = 1;
 
     private final int bucketSize;
     private final long leakRateInMillis;
+    private final int requestPerLeak;
 
     private final BlockingQueue<Runnable> bucketQueue;
     private final AtomicInteger currentQueueSize;
@@ -42,18 +44,20 @@ class LeakingBucket implements RateLimiter {
     private final ScheduledExecutorService scheduler;
 
     LeakingBucket() {
-        this(DEFAULT_BUCKET_SIZE, DEFAULT_REFILL_RATE);
+        this(DEFAULT_BUCKET_SIZE, DEFAULT_REFILL_RATE, DEFAULT_REQUEST_PER_LEAK);
     }
 
-    LeakingBucket(int bucketSize, Duration leakRate) {
-        if (bucketSize <= 0) {
+    LeakingBucket(int bucketSize, Duration leakRate, int requestsPerLeak) {
+        if (bucketSize <= 0)
             throw new IllegalArgumentException("Bucket size can not be less or equal to zero.");
-        }
-        if (leakRate == null) {
+        if (leakRate == null)
             throw new IllegalArgumentException("Refill rate should not be null.");
-        }
+        if (requestsPerLeak < 1)
+            throw new IllegalArgumentException("Request per leak should be greater than zero.");
+
         this.bucketSize = bucketSize;
         this.leakRateInMillis = leakRate.toMillis();
+        this.requestPerLeak = requestsPerLeak;
 
         this.bucketQueue = new LinkedBlockingQueue<>(bucketSize);
         this.currentQueueSize = new AtomicInteger(0);
@@ -74,10 +78,11 @@ class LeakingBucket implements RateLimiter {
 
     private void startLeaking() {
         scheduler.scheduleAtFixedRate(() -> {
-            Runnable task = bucketQueue.poll();
-            if (task != null) {
+            int toLeak = Math.min(requestPerLeak, currentQueueSize.get());
+
+            while (!bucketQueue.isEmpty() && toLeak-- > 0) {
+                Runnable task = bucketQueue.poll();
                 currentQueueSize.decrementAndGet();
-                // Execute the task
                 task.run();
             }
         }, 0, leakRateInMillis, TimeUnit.MILLISECONDS);
