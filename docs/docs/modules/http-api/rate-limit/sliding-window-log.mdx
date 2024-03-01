@@ -1,0 +1,35 @@
+---
+sidebar_position: 4
+---
+
+
+
+
+import RateLimitHowToUse from "@site/src/components/rate-limit/RateLimitHowToUse";
+
+# Sliding Window Log
+
+### Parameters
+
+- `capacity`, `threshold`
+
+### Description
+
+- Maintains a log of timestamps for each request, providing an exact count within the sliding
+window.
+- Enables accurate rate limiting by considering the exact timing of requests.
+- Suitable for scenarios where maintaining an accurate request count is crucial.
+
+Example: `windowSize = 1 min`, `maxRequests = 5`.
+
+- `T0 (01:00:00)`: Window starts, request log is empty.
+- `T1 (01:00:10)`: 2 requests arrive, timestamps `[01:00:10, 01:00:10]` logged.
+- `T2 (01:00:20)`: 3 requests arrive, timestamps `[01:00:20, 01:00:20, 01:00:20]` logged.
+- `T3 (01:00:30)`: 1 request arrives, timestamp `[01:00:30]` logged. But the window is full, so the
+request is dropped.
+- `T4 (01:01:20)`: Now the logs before `01:00:20` are cleared, and the new request is allowed.
+Because the window is sliding, and the window has room for more requests.
+
+### How to use
+
+<RateLimitHowToUse method="customSlidingWindowLog(4, Duration.ofSeconds(1))"/>
