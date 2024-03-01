@@ -34,6 +34,9 @@ export default function RateLimitHowToUse({method}) {
             <a href={rateLimitUrl} target="_blank">RateLimitFactory</a>
           </li>
         </ul>
+
+        <p>See more in our blog post about <a href="/blog/rate-limiters">Rate
+          Limiters</a></p>
       </>
   );
 }

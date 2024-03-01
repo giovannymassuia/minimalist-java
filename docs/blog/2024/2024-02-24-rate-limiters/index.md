@@ -20,8 +20,6 @@ how to use them with the minimalist-java [http-api](../../../docs/modules/http-a
 
 ## Token Bucket
 
-![Token Bucket](token-bucket.png)
-
 The token bucket algorithm is a simple and efficient way to control the rate of requests to a
 resource. It is widely used in network traffic shaping, API rate limiting, and other scenarios where
 a controlled flow of requests is required.
@@ -37,6 +35,8 @@ The token bucket algorithm is based on the concept of a bucket that holds a fixe
 - The bucket has a maximum capacity, and the number of tokens is never greater than the capacity.
 - The rate at which the bucket is refilled determines the maximum rate at which requests can be
   served.
+
+![Token Bucket](token-bucket.png)
 
 Example: `bucketSize = 5`, `refillRate = 1 token/sec`.
 
@@ -81,6 +81,8 @@ Example: `bucketSize = 4`, `leakRate = 1 request/2 sec`.
 - `T2 (01:00:03)`: Requests arrinving at this time are all dropped, because queue if full.
 - `T3 (01:00:04)`: 2nd request processed, 2 in queue, new requests continue to queue if space.
 
+---
+
 ## Fixed Window Counter
 
 The fixed window counter algorithm is based on the concept of a fixed time window. The algorithm
@@ -104,35 +106,19 @@ through. The excess can go as high as double the limit across two windows.
 
 Example: `windowSize = 1 sec`, `requestLimit = 3`.
 
-```
-    | 5         X           X       ■ => request allowed
-    | 4         X   X       X       X => request dropped
-    | 3     ■   ■   ■       ■  
-    | 2     ■   ■   ■   ■   ■
-    | 1     ■   ■   ■   ■   ■
-    |_____________________________
-    (sec)   1s  2s  3s  4s  5s
-```
+![Fixed Window Counter](fixed-window-counter.png)
 
 > A problem with this algorithm is that a burst of traffic at the edges of time windows could cause
 > more requests than allowed quota to go through. Consider the following case:
 
-```
-    Requests (excess at the edges of window):
-    5         |               |         
-    4         |           ■   |         ■ => request allowed
-    3         | ■         ■   |         X => request dropped  
-    2         | ■ ■       ■ X |           
-    1         | ■ ■     ■ ■ X |           
-    |_________|_______|_______|___________
-    00:00   00:30   01:00   01:30   02:00   (min:sec)
-              <---- Window --->
-```
+![Fixed Window Counter](fixed-window-counter-2.png)
 
 In Figure above, the system allows a maximum of 5 requests per minute, and the available quota
 resets at the human-friendly round minute. As seen, there are five requests between 00:00 and 01:00
 and five more requests between 01:00 and 02:00. For the one-minute window between 00:30 and 01:30,
 10 requests go through. That is twice as many as allowed requests.
+
+---
 
 ## Sliding Window Log
 
@@ -149,6 +135,8 @@ The algorithm enables accurate rate limiting by considering the exact timing of 
 - The algorithm has a higher memory overhead due to the need to maintain a log of timestamps for
   each request.
 
+![Sliding Window Log](sliding-window-log.png)
+
 Example: `windowSize = 1 min`, `maxRequests = 5`.
 
 - `T0 (01:00:00)`: Window starts, request log is empty.
@@ -159,21 +147,34 @@ Example: `windowSize = 1 min`, `maxRequests = 5`.
 - `T4 (01:01:20)`: Now the logs before `01:00:20` are cleared, and the new request is allowed.
   Because the window is sliding, and the window has room for more requests.
 
+---
+
 ## Sliding Window Counter with Slots
 
-- Parameters: `windowSize`, `maxRequests`.
-- Divides the window into smaller slots for a more granular count.
-- Slides the window by updating slot counts, allowing a smooth transition and more evenly
-  distributed rate limiting.
-- Approximates actual sliding window behavior with improved performance.
-- Example:
-    - windowSize = 1 min, slots = 6 (10 sec/slot), maxRequests = 10.
-      ```
-      T0 (01:00:00): Window starts, 6 slots initialized with 0 requests.
-      T1 (01:00:20): 4 requests arrive, distributed in the first 2 slots.
-      T2 (01:00:40): Window slides, first 2 slots cleared, 4 requests in next 2 slots.
-      T3 (01:00:50): 3 more requests, fit into the 5th slot, total 7 requests allowed.
-      ```
+The sliding window counter with slots algorithm is a variation of the sliding window counter
+algorithm. The algorithm divides the window into smaller slots for a more granular count and slides
+the window by updating slot counts, allowing a smooth transition and more evenly distributed rate
+limiting. The algorithm approximates actual sliding window behavior with improved performance.
+
+- The algorithm divides the window into smaller slots for a more granular count.
+- The algorithm slides the window by updating slot counts, allowing a smooth transition and more
+  evenly distributed rate limiting.
+- The algorithm approximates actual sliding window behavior with improved performance.
+- The window size and the maximum number of requests are configurable.
+- The algorithm is suitable for scenarios where a more evenly distributed rate limiting mechanism is
+  required.
+- The algorithm has a lower memory overhead due to the use of slots for a more granular count.
+
+Example: `windowSize = 1 min`, `slots = 6 (10 sec/slot)`, `maxRequests = 10`.
+
+- `T0 (01:00:00)`: Window starts, 6 slots initialized with 0 requests.
+- `T1 (01:00:20)`: 4 requests arrive, distributed in the first 2 slots.
+- `T2 (01:00:40)`: Window slides, first 2 slots cleared, 4 requests in next 2 slots.
+- `T3 (01:00:50)`: 3 more requests, fit into the 5th slot, total 7 requests allowed.
+
+![Sliding Window Counter with Slots](sliding-window-counter-with-slots-1.png)
+
+---
 
 ## Approximate Sliding Window Counter
 
@@ -199,59 +200,17 @@ smoothing out traffic spikes with minimal memory usage.
 - The algorithm is suitable for use cases where an exact count is less critical.
 - The algorithm has a lower memory overhead due to the use of a weighted count.
 
+Example: `windowSize = 1 min`, `requestLimit = 7`
 
-- Parameters: `windowSize`, `maxRequests`.
-- Utilizes current and previous window counts with a weighting system based on time elapsed in
-  the current window.
-- Offers a balance between accuracy and efficiency, smoothing out traffic spikes with minimal
-  memory usage.
-- Suitable for use cases where an exact count is less critical.
+- `T0 (01:00:00)`: Window starts, 0 requests counted.
+- `T1 (01:01:10)`: Previous window had 5 requests, current window has 2.
+- `T2 (01:01:15)`: New request evaluated with weighted count: `2 (current) + 5 * 0.75 (previous
+  weighted) = 5.75`, rounded down to `5`, request allowed.
+- `T3 (01:02:00)`: Window resets, counting starts afresh for the new minute.
 
-Example: `windowSize = 1 min`, `maxRequests = 7`.
+![Approximate Sliding Window Counter](approximate-sliding-window-counter.png)
 
-- T0 (01:00:00): Window starts, 0 requests counted.
-- T1 (01:01:10): Previous window had 5 requests, current window has 2.
-- T2 (01:01:15): New request evaluated with weighted count: 2 (current) + 5 * 0.75 (previous
-  weighted) = 5.75, rounded down to 5, request allowed.
-- T3 (01:02:00): Window resets, counting starts afresh for the new minute.
-
-```
-  Requests (weighted from previous window):
-  7 |             |                    ■ => request allowed in previous window                                
-  6 |             |                    ● => request allowed in current window (weighted from previous window)
-  5 |■ ■ ■ ■ ■    |                    + => new request evaluated with weighted count
-  4 |             |                    │ => window limit
-  3 |             |          
-  2 |             |          
-  1 |             |● ●       +
-    |_____________|_____________________|______
-  01:00:00     01:01:10   01:01:15   01:03:00   (min:sec)
-            <------ Window ------->
-```
-
-- At T0 (01:00:00), the window starts with 0 requests counted (│ indicates the window limit,
-  which is 7).
-- At T1 (01:00:30), we're in the middle of the current window. The previous window had 5
-  requests (■), and the current window has 2 requests (●).
-- At T2 (01:00:45), a new request arrives (+). The weighted count from the previous window (
-  5 requests at 75% weight) is added to the 2 current requests, resulting in a total of
-  5.75, which is rounded down to 5. The new request is allowed.
-- At T3 (01:01:00), the window resets, and the counting starts afresh for the new minute.
-  All counts from the previous window are no longer applicable.
-
-```
-  Requests (weighted from previous window):
-    7 |             |             |           ■ => request allowed in previous window
-    6 |             |             |           ● => request allowed in current window
-    5 |■ ■ ■ ■ ■    |             |           + => new request evaluated with weighted count
-    4 |             |             |           │ => window limit
-    3 |             |● ● ● +      |           
-    2 |             |             |           
-    1 |             |             |           
-      |_____________|_____________|___________|
-    01:00       01:00:30     01:01:00    01:01:30 (min:sec)
-               <---- Rolling Window ------>
-```
+---
 
 ## How to use it with minimalist-java
 
