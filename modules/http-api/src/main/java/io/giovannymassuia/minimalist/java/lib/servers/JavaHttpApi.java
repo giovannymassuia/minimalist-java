@@ -20,7 +20,6 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Executor;
@@ -35,8 +34,11 @@ import com.sun.net.httpserver.HttpServer;
 
 import io.giovannymassuia.minimalist.java.lib.HttpContext;
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route;
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
+import io.giovannymassuia.minimalist.java.lib.route.Route;
+import io.giovannymassuia.minimalist.java.lib.route.RouteMethod;
+import io.giovannymassuia.minimalist.java.lib.route.RoutePath;
+import io.giovannymassuia.minimalist.java.lib.route.Trie;
+import io.giovannymassuia.minimalist.java.lib.route.Trie.SearchResult;
 
 class JavaHttpApi extends ApiServer {
 
@@ -66,22 +68,18 @@ class JavaHttpApi extends ApiServer {
             String method = exchange.getRequestMethod();
             URI uri = exchange.getRequestURI();
 
-            Map<String, String> extractedPathParams = new HashMap<>();
             Map<String, String> extractedQueryParams = extractQueryParameters(uri);
 
             // logger.info("Received %s request for %s".formatted(method, uri));
 
-            List<RoutePath> routePaths = route.pathsByMethod(Route.RouteMethod.valueOf(method));
+            Trie routePaths = route.pathsByMethod(RouteMethod.valueOf(method));
 
-            Optional<RoutePath> routePath = routePaths.stream()
-                    .filter(rp -> isPathMatching(route.rootPath() + rp.pathPattern(), uri,
-                            extractedPathParams))
-                    .findFirst();
+            SearchResult search = routePaths.search(uri.getPath());
 
-            routePath.ifPresentOrElse(path -> {
+            Optional.ofNullable(search).ifPresentOrElse(path -> {
                 Runnable requestRunnable = () -> {
-                    HttpContext httpContext = new HttpContext(extractedPathParams,
-                            extractedQueryParams);
+                    HttpContext httpContext = new HttpContext(
+                            search.params(), extractedQueryParams);
                     ResponseEntity<?> response = path.handler().apply(httpContext);
                     try {
                         sendResponse(exchange, response);
@@ -92,7 +90,8 @@ class JavaHttpApi extends ApiServer {
 
                 // check rate limiter
                 if (rateLimiter != null) {
-                    boolean canHandle = this.rateLimiter.checkAndProcess(path, requestRunnable);
+                    boolean canHandle = this.rateLimiter.checkAndProcess(
+                        new RoutePath(method, uri.getPath(), search.handler()), requestRunnable);
 
                     if (!canHandle) {
                         try {
@@ -140,7 +139,7 @@ class JavaHttpApi extends ApiServer {
 
     private boolean isPathMatching(String path, URI uri, Map<String, String> extractedPathParams) {
         if (path != null) {
-            String regexPattern = path.replaceAll("\\{\\w+\\}", "([^/]+)");
+            String regexPattern = path.replaceAll("\\{\\w+}", "([^/]+)");
             // remove last slash if present
             if (regexPattern.endsWith("/")) {
                 regexPattern = regexPattern.substring(0, regexPattern.length() - 1);
@@ -149,7 +148,7 @@ class JavaHttpApi extends ApiServer {
             Matcher matcher = pattern.matcher(uri.getPath());
 
             if (matcher.matches()) {
-                Pattern namePattern = Pattern.compile("\\{(\\w+)\\}");
+                Pattern namePattern = Pattern.compile("\\{(\\w+)}");
                 Matcher nameMatcher = namePattern.matcher(path);
                 int groupIndex = 1;
                 while (nameMatcher.find()) {

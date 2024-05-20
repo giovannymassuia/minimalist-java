@@ -13,24 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.giovannymassuia.minimalist.java.lib;
+package io.giovannymassuia.minimalist.java.lib.route;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public record Route(String rootPath,Map<RouteMethod,List<RoutePath>>paths){
+import io.giovannymassuia.minimalist.java.lib.HttpContext;
+import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
 
-public record RoutePath(String httpMethod,String pathPattern,Function<HttpContext,ResponseEntity<?>>handler){
-
-}
-
-public enum RouteMethod {
-    GET, POST, PUT, DELETE
-
-    }
+public record Route(String rootPath,Map<RouteMethod,Trie>paths){
 
     public static Route builder(String rootPath) {
         return new Route(rootPath, new HashMap<>());
@@ -38,12 +30,12 @@ public enum RouteMethod {
 
     public Route path(RouteMethod method, String pathPattern,
             Function<HttpContext, ResponseEntity<?>> handler) {
-        paths.computeIfAbsent(method, k -> new ArrayList<>())
-                .add(new RoutePath(method.name(), pathPattern, handler));
+        paths.computeIfAbsent(method, k -> new Trie())
+                .insert(this.rootPath(), pathPattern, handler);
         return this;
     }
 
-    public List<RoutePath> pathsByMethod(RouteMethod method) {
+    public Trie pathsByMethod(RouteMethod method) {
         return paths.get(method);
     }
 

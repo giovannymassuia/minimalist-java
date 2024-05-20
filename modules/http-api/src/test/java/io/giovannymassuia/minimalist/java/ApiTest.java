@@ -24,11 +24,12 @@ import java.net.http.HttpResponse;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route;
-import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
+import io.giovannymassuia.minimalist.java.lib.route.Route;
+import io.giovannymassuia.minimalist.java.lib.route.RouteMethod;
 import io.giovannymassuia.minimalist.java.lib.servers.Api;
 
 class ApiTest {
@@ -39,20 +40,28 @@ class ApiTest {
     void setUp() {
         randomPort = (int) (Math.random() * 10000) + 10000;
         Api.create(randomPort)
-                .addRoute(Route.builder("/api")
+                .addRoute(Route.builder("/")
                         .path(RouteMethod.GET, "/",
                                 ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
                         .path(RouteMethod.GET,
                                 "/{name}",
                                 ctx -> ResponseEntity.ok(Map.of("message",
                                         "Hello " + ctx.pathParams().get("name")))))
+            .addRoute(Route.builder("/api")
+                    .path(RouteMethod.GET, "/",
+                            ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
+                    .path(RouteMethod.GET,
+                            "/{name}",
+                            ctx -> ResponseEntity.ok(Map.of("message",
+                                    "Hello " + ctx.pathParams().get("name")))))
                 .start();
     }
 
-    @Test
-    void testJavaHttpApi() throws IOException, InterruptedException {
+    @ParameterizedTest
+    @CsvSource({"/api", "/", "-"})
+    void testJavaHttpApi(String path) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(java.net.URI.create("http://localhost:" + randomPort + "/api"))
+                .uri(java.net.URI.create("http://localhost:" + randomPort + path.replace("-", "")))
                 .GET()
                 .build();
 
@@ -65,10 +74,11 @@ class ApiTest {
         }
     }
 
-    @Test
-    void testJavaHttpApiPathParam() throws IOException, InterruptedException {
+    @ParameterizedTest
+    @CsvSource({"/api/john-doe", "/john-doe" })
+    void testJavaHttpApiPathParam(String path) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(java.net.URI.create("http://localhost:" + randomPort + "/api/john-doe"))
+                .uri(java.net.URI.create("http://localhost:" + randomPort + path))
                 .GET()
                 .build();
 
