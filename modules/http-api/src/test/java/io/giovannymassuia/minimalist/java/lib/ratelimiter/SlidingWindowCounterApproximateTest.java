@@ -34,7 +34,8 @@ class SlidingWindowCounterApproximateTest {
     @BeforeEach
     void setUp() {
         // Initialize the rate limiter with a 1-second window and a maximum of 5 requests
-        rateLimiter = RateLimitFactory.customSlidingWindowCounterApproximate(5, Duration.ofSeconds(1));
+        rateLimiter = RateLimitFactory.customSlidingWindowCounterApproximate(5,
+                Duration.ofSeconds(1));
     }
 
     @Test
@@ -81,6 +82,7 @@ class SlidingWindowCounterApproximateTest {
         return new RoutePath(RouteMethod.GET.name(), "/", ctx -> ResponseEntity.ok(""));
     }
 
-    private void emptyRun() {}
+    private void emptyRun() {
+    }
 
 }

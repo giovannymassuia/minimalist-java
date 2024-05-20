@@ -31,7 +31,8 @@ public class RateLimitFactory {
         return new SlidingWindowLog(capacity, threshold);
     }
 
-    public static RateLimiter customSlidingWindowLogWithScheduler(int capacity, Duration threshold) {
+    public static RateLimiter customSlidingWindowLogWithScheduler(int capacity,
+            Duration threshold) {
         return new SlidingWindowLog(capacity, threshold, true);
     }
 
@@ -39,11 +40,13 @@ public class RateLimitFactory {
         return new TokenBucket();
     }
 
-    public static RateLimiter customTokenBucket(int bucketSize, Duration refillRate, int tokensPerRefill) {
+    public static RateLimiter customTokenBucket(int bucketSize, Duration refillRate,
+            int tokensPerRefill) {
         return new TokenBucket(bucketSize, refillRate, tokensPerRefill);
     }
 
-    public static RateLimiter customTokenBucketWithScheduler(int bucketSize, Duration refillRate, int tokensPerRefill) {
+    public static RateLimiter customTokenBucketWithScheduler(int bucketSize, Duration refillRate,
+            int tokensPerRefill) {
         return new TokenBucket(bucketSize, refillRate, tokensPerRefill, true);
     }
 
@@ -51,7 +54,8 @@ public class RateLimitFactory {
         return new LeakingBucket();
     }
 
-    public static RateLimiter customLeakingBucket(int bucketSize, Duration leakRate, int requestsPerLeak) {
+    public static RateLimiter customLeakingBucket(int bucketSize, Duration leakRate,
+            int requestsPerLeak) {
         return new LeakingBucket(bucketSize, leakRate, requestsPerLeak);
     }
 
@@ -67,7 +71,8 @@ public class RateLimitFactory {
         return new SlidingWindowCounterSlots();
     }
 
-    public static RateLimiter customSlidingWindowCounterSlots(int maxRequests, Duration windowSize) {
+    public static RateLimiter customSlidingWindowCounterSlots(int maxRequests,
+            Duration windowSize) {
         return new SlidingWindowCounterSlots(maxRequests, windowSize);
     }
 
@@ -75,7 +80,8 @@ public class RateLimitFactory {
         return new SlidingWindowCounterApproximate();
     }
 
-    public static RateLimiter customSlidingWindowCounterApproximate(int maxRequests, Duration windowSize) {
+    public static RateLimiter customSlidingWindowCounterApproximate(int maxRequests,
+            Duration windowSize) {
         return new SlidingWindowCounterApproximate(maxRequests, windowSize);
     }
 }

@@ -53,7 +53,8 @@ class SlidingWindowLogTest {
 
     @Test
     void checkWithScheduler() throws InterruptedException {
-        RateLimiter rl = RateLimitFactory.customSlidingWindowLogWithScheduler(3, Duration.ofSeconds(3));
+        RateLimiter rl = RateLimitFactory.customSlidingWindowLogWithScheduler(3,
+                Duration.ofSeconds(3));
 
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t1
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t2
@@ -77,5 +78,6 @@ class SlidingWindowLogTest {
         return new RoutePath(RouteMethod.GET.name(), "/", ctx -> ResponseEntity.ok(""));
     }
 
-    private void emptyRun() {}
+    private void emptyRun() {
+    }
 }

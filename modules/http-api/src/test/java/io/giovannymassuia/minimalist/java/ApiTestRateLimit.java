@@ -42,7 +42,8 @@ class ApiTestRateLimit {
         Api.create(randomPort)
                 .rateLimit(RateLimitFactory.blockAllRequests())
                 .addRoute(Route.builder("/api")
-                        .path(RouteMethod.GET, "/", ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
+                        .path(RouteMethod.GET, "/",
+                                ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
                 .start();
     }
 
@@ -54,7 +55,8 @@ class ApiTestRateLimit {
                 .build();
 
         try (var client = HttpClient.newHttpClient()) {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
 
             assertEquals(429, response.statusCode());
             assertEquals("Too many requests.", response.body());

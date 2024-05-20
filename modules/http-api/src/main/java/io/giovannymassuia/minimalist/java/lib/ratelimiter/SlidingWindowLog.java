@@ -64,7 +64,8 @@ class SlidingWindowLog implements RateLimiter {
             // Cleanup at half the window size
             long cleanupInterval = thresholdMilliseconds / 2;
             // Schedule the cleanup task to run periodically
-            scheduler.scheduleAtFixedRate(this::cleanupOldRequests, 0, cleanupInterval, TimeUnit.MILLISECONDS);
+            scheduler.scheduleAtFixedRate(this::cleanupOldRequests, 0, cleanupInterval,
+                    TimeUnit.MILLISECONDS);
         } else {
             this.scheduler = null;
         }
@@ -88,7 +89,8 @@ class SlidingWindowLog implements RateLimiter {
                 allowRequest = true;
             } else {
                 logger.info(
-                        "windowLog at capacity [%d]. Head timestamp [%d]".formatted(getWindowSize(), windowLog.peek()));
+                        "windowLog at capacity [%d]. Head timestamp [%d]".formatted(getWindowSize(),
+                                windowLog.peek()));
             }
         }
 

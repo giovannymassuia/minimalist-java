@@ -60,7 +60,8 @@ class TokenBucket implements RateLimiter {
         if (tokensPerRefill < 1)
             throw new IllegalArgumentException("Tokens per refill can not be less than 1.");
         if (tokensPerRefill > bucketSize)
-            throw new IllegalArgumentException("Tokens per refill can not be greater than bucket size.");
+            throw new IllegalArgumentException(
+                    "Tokens per refill can not be greater than bucket size.");
         if (refillRate == null)
             throw new IllegalArgumentException("Refill rate should not be null.");
 
@@ -73,7 +74,8 @@ class TokenBucket implements RateLimiter {
 
         if (useScheduler) {
             this.scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.scheduleAtFixedRate(this::refill, 0, refillRateMilliseconds, TimeUnit.MILLISECONDS);
+            scheduler.scheduleAtFixedRate(this::refill, 0, refillRateMilliseconds,
+                    TimeUnit.MILLISECONDS);
         } else {
             this.scheduler = null;
         }
@@ -110,14 +112,16 @@ class TokenBucket implements RateLimiter {
     private synchronized void refill() {
         long now = System.currentTimeMillis();
         long lastRefill = lastRefillTimestamp.get();
-        long elapsedTime = now - lastRefill + 100; // Add 100ms to make sure we don't miss any tokens
+        long elapsedTime = now - lastRefill + 100; // Add 100ms to make sure we don't miss any
+                                                   // tokens
         if (elapsedTime >= refillRateMilliseconds) {
             int newBucketSize = Math.min(bucketSize, bucket.get() + tokensPerRefill);
             bucket.set(newBucketSize);
             lastRefillTimestamp.set(now);
         }
 
-        logger.fine("Bucket refilled to , total [" + bucket.get() + "] tokens at " + LocalDateTime.now() + ".");
+        logger.fine("Bucket refilled to , total [" + bucket.get() + "] tokens at "
+                + LocalDateTime.now() + ".");
     }
 
     int getAvailableTokensCount() {

@@ -22,7 +22,8 @@ public abstract class ApiServer {
 
     protected RateLimiter rateLimiter;
 
-    protected ApiServer() {}
+    protected ApiServer() {
+    }
 
     abstract void create(int port);
 

@@ -58,7 +58,8 @@ public class Api {
 
     public void start() {
         apiServer.start();
-        logger.info("Server [%s] started on port %d".formatted(apiServer.getClass().getSimpleName(), port));
+        logger.info("Server [%s] started on port %d".formatted(apiServer.getClass().getSimpleName(),
+                port));
     }
 
 }

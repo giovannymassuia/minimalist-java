@@ -33,11 +33,13 @@ public class Main {
         rootLogger.setLevel(Level.FINE);
 
         Api.create(8080)
-                // .rateLimit(RateLimitFactory.customTokenBucketWithScheduler(5, Duration.ofSeconds(2), 5))
+                // .rateLimit(RateLimitFactory.customTokenBucketWithScheduler(5,
+                // Duration.ofSeconds(2), 5))
                 // .rateLimit(RateLimitFactory.customTokenBucket(5, Duration.ofSeconds(2), 5))
                 .rateLimit(RateLimitFactory.customLeakingBucket(5, Duration.ofSeconds(1), 1))
                 .addRoute(Route.builder("/")
-                        .path(RouteMethod.GET, "/", ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
+                        .path(RouteMethod.GET, "/",
+                                ctx -> ResponseEntity.ok(Map.of("message", "Hello World!"))))
                 .start();
     }
 

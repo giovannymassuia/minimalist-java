@@ -36,9 +36,9 @@ class TokenBucketTest {
         RateLimiter rl = RateLimitFactory.customTokenBucket(bucketSize, refillRate, bucketSize);
 
         /*
-         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens - Make
-         * more requests, bucket will be empty, should not go through - wait bucket to refill, and make more
-         * request
+         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens -
+         * Make more requests, bucket will be empty, should not go through - wait bucket to refill,
+         * and make more request
          */
 
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t1
@@ -62,12 +62,13 @@ class TokenBucketTest {
 
     @Test
     void checkWithScheduler() throws InterruptedException {
-        RateLimiter rl = RateLimitFactory.customTokenBucketWithScheduler(4, Duration.ofSeconds(1), 1);
+        RateLimiter rl = RateLimitFactory.customTokenBucketWithScheduler(4, Duration.ofSeconds(1),
+                1);
 
         /*
-         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens - Make
-         * more requests, bucket will be empty, should not go through - wait bucket to refill, and make more
-         * request
+         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens -
+         * Make more requests, bucket will be empty, should not go through - wait bucket to refill,
+         * and make more request
          */
 
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t1
@@ -88,6 +89,7 @@ class TokenBucketTest {
         return new RoutePath(RouteMethod.GET.name(), "/", ctx -> ResponseEntity.ok(""));
     }
 
-    private void emptyRun() {}
+    private void emptyRun() {
+    }
 
 }

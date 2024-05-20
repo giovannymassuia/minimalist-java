@@ -40,10 +40,12 @@ class ApiTest {
         randomPort = (int) (Math.random() * 10000) + 10000;
         Api.create(randomPort)
                 .addRoute(Route.builder("/api")
-                        .path(RouteMethod.GET, "/", ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
+                        .path(RouteMethod.GET, "/",
+                                ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
                         .path(RouteMethod.GET,
                                 "/{name}",
-                                ctx -> ResponseEntity.ok(Map.of("message", "Hello " + ctx.pathParams().get("name")))))
+                                ctx -> ResponseEntity.ok(Map.of("message",
+                                        "Hello " + ctx.pathParams().get("name")))))
                 .start();
     }
 
@@ -55,7 +57,8 @@ class ApiTest {
                 .build();
 
         try (var client = HttpClient.newHttpClient()) {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
 
             assertEquals(200, response.statusCode());
             assertEquals("{\"message\":\"Hello World!\"}", response.body());
@@ -70,7 +73,8 @@ class ApiTest {
                 .build();
 
         try (var client = HttpClient.newHttpClient()) {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
 
             assertEquals(200, response.statusCode());
             assertEquals("{\"message\":\"Hello john-doe\"}", response.body());

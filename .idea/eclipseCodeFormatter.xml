@@ -5,7 +5,7 @@
       <ProjectSpecificProfile>
         <option name="formatter" value="ECLIPSE" />
         <option name="pathToConfigFileJava" value="$PROJECT_DIR$/modules/eclipse-java-google-style.xml" />
-        <option name="selectedJavaProfile" value="GoogleStyle" />
+        <option name="selectedJavaProfile" value="SimplifiedGoogleStyle" />
       </ProjectSpecificProfile>
     </option>
   </component>

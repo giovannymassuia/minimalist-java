@@ -74,7 +74,8 @@ class FixedWindowCounter implements RateLimiter {
     }
 
     @Override
-    public void shutdownGracefully() {}
+    public void shutdownGracefully() {
+    }
 
     public int getAvailableTokensCount() {
         return maxRequests - requestCount.get();

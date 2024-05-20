@@ -68,6 +68,7 @@ class LeakingBucketTest {
         return new RoutePath(RouteMethod.GET.name(), "/", ctx -> ResponseEntity.ok(""));
     }
 
-    private void emptyRun() {}
+    private void emptyRun() {
+    }
 
 }
