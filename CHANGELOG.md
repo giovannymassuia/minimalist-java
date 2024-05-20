@@ -5,6 +5,14 @@ the `minimalist-java`
 framework and its modules. The changelog follows the conventions
 from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.0.21-beta]
+
+### 🛠️ `minimalist-api` Module
+
+#### 🔨 refactor: Routes resolver
+
+- Refactor routes resolver to use Trie data structure for better performance.
+
 ## [0.0.12-beta] - 2024-02-18
 
 ### 🛠️ `minimalist-api` Module
