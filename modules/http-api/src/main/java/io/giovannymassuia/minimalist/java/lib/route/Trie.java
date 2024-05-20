@@ -19,7 +19,7 @@ public class Trie {
         String[] segments = fullPath.split("/");
         Set<String> seenParameters = new HashSet<>();
 
-        if(fullPath.equals("/")) {
+        if (fullPath.equals("/")) {
             segments = new String[]{""};
         }
 
@@ -29,7 +29,7 @@ public class Trie {
 
                 if (seenParameters.contains(paramName)) {
                     throw new IllegalArgumentException(
-                        "Cannot use the same parameter name more than once in a route.");
+                            "Cannot use the same parameter name more than once in a route.");
                 }
                 seenParameters.add(paramName);
 
@@ -37,8 +37,8 @@ public class Trie {
                     // Check if the parameter is of the same type.
                     if (!current.parameterChild.parameterName.equals(paramName)) {
                         throw new IllegalArgumentException(
-                            "Invalid path: " + path + ". Parameter " + paramName
-                                + " is already defined.");
+                                "Invalid path: " + path + ". Parameter " + paramName
+                                        + " is already defined.");
                     }
                 } else {
                     TrieNode paramNode = new TrieNode();

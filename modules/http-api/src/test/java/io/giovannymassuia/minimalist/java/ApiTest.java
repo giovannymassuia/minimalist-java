@@ -47,13 +47,13 @@ class ApiTest {
                                 "/{name}",
                                 ctx -> ResponseEntity.ok(Map.of("message",
                                         "Hello " + ctx.pathParams().get("name")))))
-            .addRoute(Route.builder("/api")
-                    .path(RouteMethod.GET, "/",
-                            ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
-                    .path(RouteMethod.GET,
-                            "/{name}",
-                            ctx -> ResponseEntity.ok(Map.of("message",
-                                    "Hello " + ctx.pathParams().get("name")))))
+                .addRoute(Route.builder("/api")
+                        .path(RouteMethod.GET, "/",
+                                ctx -> ResponseEntity.ok(Map.of("message", "Hello World!")))
+                        .path(RouteMethod.GET,
+                                "/{name}",
+                                ctx -> ResponseEntity.ok(Map.of("message",
+                                        "Hello " + ctx.pathParams().get("name")))))
                 .start();
     }
 
@@ -75,7 +75,7 @@ class ApiTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"/api/john-doe", "/john-doe" })
+    @CsvSource({"/api/john-doe", "/john-doe"})
     void testJavaHttpApiPathParam(String path) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(java.net.URI.create("http://localhost:" + randomPort + path))

@@ -91,7 +91,7 @@ class JavaHttpApi extends ApiServer {
                 // check rate limiter
                 if (rateLimiter != null) {
                     boolean canHandle = this.rateLimiter.checkAndProcess(
-                        new RoutePath(method, uri.getPath(), search.handler()), requestRunnable);
+                            new RoutePath(method, uri.getPath(), search.handler()), requestRunnable);
 
                     if (!canHandle) {
                         try {
