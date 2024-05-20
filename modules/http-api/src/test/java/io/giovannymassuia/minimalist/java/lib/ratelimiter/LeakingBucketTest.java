@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
+import io.giovannymassuia.minimalist.java.lib.route.RouteMethod;
+import io.giovannymassuia.minimalist.java.lib.route.RoutePath;
 
 class LeakingBucketTest {
 

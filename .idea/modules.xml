@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.github/.github.iml" filepath="$PROJECT_DIR$/.github/.github.iml" />
       <module fileurl="file://$PROJECT_DIR$/docs/docs.iml" filepath="$PROJECT_DIR$/docs/docs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/minimalist-java.iml" filepath="$PROJECT_DIR$/.idea/minimalist-java.iml" />
     </modules>
   </component>
 </project>

@@ -15,8 +15,8 @@
  */
 package io.giovannymassuia.minimalist.java.lib.servers;
 
-import io.giovannymassuia.minimalist.java.lib.Route;
 import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimiter;
+import io.giovannymassuia.minimalist.java.lib.route.Route;
 
 public abstract class ApiServer {
 

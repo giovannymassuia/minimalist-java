@@ -17,8 +17,8 @@ package io.giovannymassuia.minimalist.java.lib.servers;
 
 import java.util.logging.Logger;
 
-import io.giovannymassuia.minimalist.java.lib.Route;
 import io.giovannymassuia.minimalist.java.lib.ratelimiter.RateLimiter;
+import io.giovannymassuia.minimalist.java.lib.route.Route;
 
 public class Api {
 

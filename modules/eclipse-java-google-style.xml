@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <profiles version="13">
-    <profile kind="CodeFormatterProfile" name="SimplifiedGoogleStyle" version="13">
+    <profile kind="CodeFormatterProfile" name="GoogleStyle" version="13">
         <!-- General settings -->
         <setting id="org.eclipse.jdt.core.compiler.source" value="1.7"/>
         <setting id="org.eclipse.jdt.core.compiler.compliance" value="1.7"/>
         <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space"/>
         <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4"/>
-        <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="100"/>
+        <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="120"/>
 
         <!-- Braces -->
         <setting id="org.eclipse.jdt.core.formatter.brace_position_for_type_declaration" value="end_of_line"/>

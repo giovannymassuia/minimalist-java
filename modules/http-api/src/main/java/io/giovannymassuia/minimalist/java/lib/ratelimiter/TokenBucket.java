@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
+import io.giovannymassuia.minimalist.java.lib.route.RoutePath;
 
 /**
  * Token Bucket algorithm implementation.

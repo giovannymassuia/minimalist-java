@@ -24,8 +24,8 @@ import java.time.Duration;
 import org.junit.jupiter.api.Test;
 
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
+import io.giovannymassuia.minimalist.java.lib.route.RouteMethod;
+import io.giovannymassuia.minimalist.java.lib.route.RoutePath;
 
 class TokenBucketTest {
 
@@ -36,9 +36,9 @@ class TokenBucketTest {
         RateLimiter rl = RateLimitFactory.customTokenBucket(bucketSize, refillRate, bucketSize);
 
         /*
-         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens -
-         * Make more requests, bucket will be empty, should not go through - wait bucket to refill,
-         * and make more request
+         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens - Make
+         * more requests, bucket will be empty, should not go through - wait bucket to refill, and make more
+         * request
          */
 
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t1
@@ -66,9 +66,9 @@ class TokenBucketTest {
                 1);
 
         /*
-         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens -
-         * Make more requests, bucket will be empty, should not go through - wait bucket to refill,
-         * and make more request
+         * Scenario: - Bucket uses the default max capacity - Makes request to consume all tokens - Make
+         * more requests, bucket will be empty, should not go through - wait bucket to refill, and make more
+         * request
          */
 
         assertTrue(rl.checkAndProcess(buildRoutePath(), this::emptyRun)); // t1

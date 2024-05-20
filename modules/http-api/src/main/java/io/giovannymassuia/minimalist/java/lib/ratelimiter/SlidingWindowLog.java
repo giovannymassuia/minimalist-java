@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
+import io.giovannymassuia.minimalist.java.lib.route.RoutePath;
 
 class SlidingWindowLog implements RateLimiter {
 

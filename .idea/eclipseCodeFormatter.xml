@@ -3,9 +3,11 @@
   <component name="EclipseCodeFormatterProjectSettings">
     <option name="projectSpecificProfile">
       <ProjectSpecificProfile>
+        <option name="formatOtherFileTypesWithIntelliJ" value="false" />
+        <option name="formatSeletedTextInAllFileTypes" value="false" />
         <option name="formatter" value="ECLIPSE" />
         <option name="pathToConfigFileJava" value="$PROJECT_DIR$/modules/eclipse-java-google-style.xml" />
-        <option name="selectedJavaProfile" value="SimplifiedGoogleStyle" />
+        <option name="selectedJavaProfile" value="GoogleStyle" />
       </ProjectSpecificProfile>
     </option>
   </component>

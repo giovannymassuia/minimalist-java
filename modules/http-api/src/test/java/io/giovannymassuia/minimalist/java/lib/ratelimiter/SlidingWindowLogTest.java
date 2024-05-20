@@ -24,8 +24,8 @@ import java.time.Duration;
 import org.junit.jupiter.api.Test;
 
 import io.giovannymassuia.minimalist.java.lib.ResponseEntity;
-import io.giovannymassuia.minimalist.java.lib.Route.RouteMethod;
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
+import io.giovannymassuia.minimalist.java.lib.route.RouteMethod;
+import io.giovannymassuia.minimalist.java.lib.route.RoutePath;
 
 class SlidingWindowLogTest {
 

@@ -15,7 +15,7 @@
  */
 package io.giovannymassuia.minimalist.java.lib.ratelimiter;
 
-import io.giovannymassuia.minimalist.java.lib.Route.RoutePath;
+import io.giovannymassuia.minimalist.java.lib.route.RoutePath;
 
 public interface RateLimiter {
 
